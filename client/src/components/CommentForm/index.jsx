@@ -2,38 +2,29 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 
-import { ADD_THOUGHT } from '../../utils/mutations';
-import { QUERY_THOUGHTS, QUERY_ME } from '../../utils/queries';
+import { ADD_COMMENT } from '../../utils/mutations';
 
 import Auth from '../../utils/auth';
 
-const ThoughtForm = () => {
-  const [thoughtText, setThoughtText] = useState('');
-
+const CommentForm = ({ thoughtId }) => {
+  const [commentText, setCommentText] = useState('');
   const [characterCount, setCharacterCount] = useState(0);
 
-  const [addThought, { error }] = useMutation
-  (ADD_THOUGHT, {
-    refetchQueries: [
-      QUERY_THOUGHTS,
-      'getThoughts',
-      QUERY_ME,
-      'me'
-    ]
-  });
+  const [addComment, { error }] = useMutation(ADD_COMMENT);
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      const { data } = await addThought({
+      const { data } = await addComment({
         variables: {
-          thoughtText,
-          thoughtAuthor: Auth.getProfile().data.username,
+          thoughtId,
+          commentText,
+          commentAuthor: Auth.getProfile().data.username,
         },
       });
 
-      setThoughtText('');
+      setCommentText('');
     } catch (err) {
       console.error(err);
     }
@@ -42,15 +33,15 @@ const ThoughtForm = () => {
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    if (name === 'thoughtText' && value.length <= 280) {
-      setThoughtText(value);
+    if (name === 'commentText' && value.length <= 280) {
+      setCommentText(value);
       setCharacterCount(value.length);
     }
   };
 
   return (
     <div>
-      <h3>What's on your techy mind?</h3>
+      <h4>What are your thoughts on this thought?</h4>
 
       {Auth.loggedIn() ? (
         <>
@@ -60,6 +51,7 @@ const ThoughtForm = () => {
             }`}
           >
             Character Count: {characterCount}/280
+            {error && <span className="ml-2">{error.message}</span>}
           </p>
           <form
             className="flex-row justify-center justify-space-between-md align-center"
@@ -67,9 +59,9 @@ const ThoughtForm = () => {
           >
             <div className="col-12 col-lg-9">
               <textarea
-                name="thoughtText"
-                placeholder="Here's a new thought..."
-                value={thoughtText}
+                name="commentText"
+                placeholder="Add your comment..."
+                value={commentText}
                 className="form-input w-100"
                 style={{ lineHeight: '1.5', resize: 'vertical' }}
                 onChange={handleChange}
@@ -78,14 +70,9 @@ const ThoughtForm = () => {
 
             <div className="col-12 col-lg-3">
               <button className="btn btn-primary btn-block py-3" type="submit">
-                Add Thought
+                Add Comment
               </button>
             </div>
-            {error && (
-              <div className="col-12 my-3 bg-danger text-white p-3">
-                {error.message}
-              </div>
-            )}
           </form>
         </>
       ) : (
@@ -98,4 +85,4 @@ const ThoughtForm = () => {
   );
 };
 
-export default ThoughtForm;
+export default CommentForm;
