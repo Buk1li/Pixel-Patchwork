@@ -51,7 +51,8 @@ const typeDefs = `
     addComment(thoughtId: ID!, commentText: String!): Thought
     removeThought(thoughtId: ID!): Thought
     removeComment(thoughtId: ID!, commentId: ID!): Thought
-    addPixel(pixelColor: String!, placementUser: String!, coordinates: [Int]!): Pixel
+    addPixel(pixelId: ID!, pixelColor: String!, placementUser: String!, coordinates: [Int]!): Pixel
+    updatePixel(pixelId: ID!, pixelColor: String!, placementUser: String!, coordinates: [Int]!): Pixel
   }
 `;
 
