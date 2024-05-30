@@ -1,4 +1,4 @@
-const { User, Thought } = require('../models');
+const { User, Thought, Pixel } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');
 
 const resolvers = {
@@ -21,6 +21,9 @@ const resolvers = {
         return User.findOne({ _id: context.user._id }).populate('thoughts');
       }
       throw AuthenticationError;
+    },
+    pixels: async () => {
+      return Pixel.find();
     },
   },
 
@@ -113,6 +116,9 @@ const resolvers = {
         );
       }
       throw AuthenticationError;
+    },
+    addPixel: async (parent, { pixelColor, placementUser, coordinates }) => {
+      return Pixel.create({ pixelColor, placementUser, coordinates });
     },
   },
 };
