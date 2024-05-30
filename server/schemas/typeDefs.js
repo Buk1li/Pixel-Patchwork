@@ -22,6 +22,14 @@ const typeDefs = `
     createdAt: String
   }
 
+  type Pixel {
+    _id: ID
+    pixelColor: String!
+    placementUser: String!
+    coordinates: [Int]!
+    updatedAt: String
+  }
+
   type Auth {
     token: ID!
     user: User
@@ -33,6 +41,7 @@ const typeDefs = `
     thoughts(username: String): [Thought]
     thought(thoughtId: ID!): Thought
     me: User
+    pixels: [Pixel]
   }
 
   type Mutation {
@@ -42,6 +51,7 @@ const typeDefs = `
     addComment(thoughtId: ID!, commentText: String!): Thought
     removeThought(thoughtId: ID!): Thought
     removeComment(thoughtId: ID!, commentId: ID!): Thought
+    addPixel(pixelColor: String!, placementUser: String!, coordinates: [Int]!): Pixel
   }
 `;
 
