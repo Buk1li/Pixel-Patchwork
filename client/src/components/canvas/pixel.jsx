@@ -3,7 +3,8 @@ import { styled } from '@mui/material/styles';
 import { useState } from 'react';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-function Pixel ({pixelColor, placmentUser, coordinates, updatedAt}) {
+
+function Pixel ({pixelColor, placmentUser, coordinates, updatedAt, pixelTarget}) {
     //creates color state
     const [colorState, setColorState] = useState(pixelColor);
 
