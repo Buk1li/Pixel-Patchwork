@@ -4,10 +4,10 @@ const { signToken, AuthenticationError } = require('../utils/auth');
 const resolvers = {
   Query: {
     users: async () => {
-      return User.find().populate('thoughts');
+      return User.find();
     },
     user: async (parent, { username }) => {
-      return User.findOne({ username }).populate('thoughts');
+      return User.findOne({ username });
     },
     thoughts: async (parent, { username }) => {
       const params = username ? { username } : {};
@@ -117,8 +117,27 @@ const resolvers = {
       }
       throw AuthenticationError;
     },
+    // this resolver likely won't be used
     addPixel: async (parent, { pixelColor, placementUser, coordinates }) => {
       return Pixel.create({ pixelColor, placementUser, coordinates });
+    },
+    // for now this resolver uses the pixelId to find the pixel but we may want to change that to the coordinates instead at some point
+    updatePixel: async (parent, { pixelId, pixelColor, placementUser, coordinates }, context) => {
+      // if(context.user){
+        const pixel = await Pixel.findByIdAndUpdate(
+          pixelId,
+          {
+            $set:{pixelColor, placementUser, coordinates}
+          }
+        );
+
+        // This tells the user object to set their lastUpdate value to the current time
+        const user = await User.findOne({username: placementUser})
+        user.updateTime();
+
+        return pixel;
+      // }
+      // throw AuthenticationError;
     },
   },
 };
