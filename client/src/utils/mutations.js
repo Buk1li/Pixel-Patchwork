@@ -54,3 +54,15 @@ export const ADD_COMMENT = gql`
     }
   }
 `;
+
+export const  UPDATE_PIXEL = gql`
+mutation updatePixel($pixelId: ID!, $pixelColor: String!, $placementUser: String!, $coordinates: [Int]!){
+  updatePixel(pixelId: $pixelId, pixelColor: $pixelColor,  placementUser:  $placementUser, coordinates: $coordinates){
+      pixelId
+      pixelColor
+      placementUser
+      coordinates
+  }
+}
+
+`
