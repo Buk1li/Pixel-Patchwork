@@ -5,31 +5,31 @@ import ColorForm from './colorForm';
 import { useQuery } from '@apollo/client';
 import { PIXELS } from '../../utils/queries';
 import '../../assets/styles/canvas.css'
+import './canvas.css';
 
+const Canvas = () => {
+    const [pixelTarget, setPixelTarget] = useState(null);
 
-const Canvas = async() => {
-    //gets the pixel array
-    const getPixels = useQuery(PIXELS);
+    // refetch is potentially very useful but I haven't been able to get it working correctly. For now, it is never used
+    let { loading, data, refetch } = useQuery(PIXELS);
 
-    //sets the target pistal state as an empty object by default
-    const [pixelTarget, setPixelTarget] = useState({});
-
-    //sets the pixel array state to a call to the server for the array
-    const [pixelArray, setPixelArray] = useState(await getPixels());
-
+    const pixelArray = data?.pixels || [];
 
     return (
         <Container>
-            {pixelArray.map((pixel)=>(
-                <Pixel pixelColor ={pixel.pixelColor} 
-                placmentUser = {pixel.placmentUser} 
-                coordinates = {pixel.coordinates} 
-                updatedAt = {pixel.updatedAt} 
-                pixelTarget={pixelTarget}>
-                </Pixel>
-            ))}
+            <div id="pixel-grid">
+                {loading ? null
+                :(
+                    pixelArray.map((pixel)=>{
+                        return (<Pixel pixel={pixel} key={pixel._id} setPixelTarget={setPixelTarget}></Pixel>)
+                    })
+                )}
+            </div>
+            <ColorForm pixelTarget={pixelTarget} setPixelTarget={setPixelTarget}/>
         </Container>
     );
 };
 
 export default Canvas;
+
+

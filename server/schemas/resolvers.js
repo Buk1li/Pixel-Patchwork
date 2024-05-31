@@ -121,13 +121,12 @@ const resolvers = {
     addPixel: async (parent, { pixelColor, placementUser, coordinates }) => {
       return Pixel.create({ pixelColor, placementUser, coordinates });
     },
-    // for now this resolver uses the pixelId to find the pixel but we may want to change that to the coordinates instead at some point
     updatePixel: async (parent, { pixelId, pixelColor, placementUser, coordinates }, context) => {
       // if(context.user){
         const pixel = await Pixel.findByIdAndUpdate(
           pixelId,
           {
-            $set:{pixelColor, placementUser, coordinates}
+            $set:{pixelColor, placementUser, coordinates, updatedAt: Date.now()}
           },
           {new:true}
         );

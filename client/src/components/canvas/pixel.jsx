@@ -4,12 +4,17 @@ import { useState } from 'react';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
-function Pixel ({pixelColor, placmentUser, coordinates, updatedAt, pixelTarget, setPixelTarget}) {
+
+function Pixel ({pixel, setPixelTarget}) {
     //creates color state
-    const [colorState, setColorState] = useState(pixelColor);
+    const [colorState, setColorState] = useState(pixel.pixelColor);
 
     // makes color of the pixel equal to the color state
-    const style = {backgroundColor: colorState}
+    const style = {
+      backgroundColor: colorState,
+      width: '50px',
+      height: '50px'
+    }
 
     // sets up styling for MUI tooltip
     const PixelTooltip = styled(({ className, ...props }) => (
@@ -24,13 +29,14 @@ function Pixel ({pixelColor, placmentUser, coordinates, updatedAt, pixelTarget, 
         },
       }));
 
-      const handleClick = (event) =>{
-        setPixelTarget ({
-          pixelColor: event.target.style.backgroundColor,
-          placmentUser: event.target.data-User,
-          coordinates: event.target.data-placement,
-          updatedAt: event.target.data-updatedAt
-        })
+      const handleClick = (pixel) =>{
+        // create a copy of pixel that we can safely modify
+        let temp = {...pixel};
+        // add setColorState to the copy of pixel so that the color picker can access it
+        temp.setColorState = setColorState;
+        // set the pixelTarget state to the modified copy of pixel
+        setPixelTarget (temp);
+
         // need to check if user is logged in
         //need to check if user has any more placements left
 
@@ -38,15 +44,12 @@ function Pixel ({pixelColor, placmentUser, coordinates, updatedAt, pixelTarget, 
       }
 
     return (
-        <PixelTooltip title = {`placed by: ${placmentUser} at ${updatedAt}`}>
-        <div className={`pixel`} 
-        style={style} 
-        data-placement = {coordinates} 
-        data-updatedAt = {updatedAt}
-        data-User = {placmentUser}
-        onClick={handleClick}
-        >
-        </div>
+        <PixelTooltip title = {`placed by: ${pixel.placmentUser} at ${pixel.updatedAt}`}>
+          <div
+            onClick={() => handleClick(pixel)}
+            className={`pixel`} 
+            style={style} 
+          ></div>
         </PixelTooltip>
     )
 };

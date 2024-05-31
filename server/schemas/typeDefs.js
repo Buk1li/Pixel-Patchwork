@@ -52,7 +52,7 @@ const typeDefs = `
     removeThought(thoughtId: ID!): Thought
     removeComment(thoughtId: ID!, commentId: ID!): Thought
     addPixel(pixelId: ID!, pixelColor: String!, placementUser: String!, coordinates: [Int]!): Pixel
-    updatePixel(pixelId: ID!, pixelColor: String!, placementUser: String!, coordinates: [Int]!): Pixel
+    updatePixel(pixelId: ID!, pixelColor: String!, placementUser: String!): Pixel
   }
 `;
 
