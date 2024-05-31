@@ -27,7 +27,7 @@ const pixelSchema = new Schema({
   updatedAt: {
     type: Date,
     default: Date.now,
-    get: (timestamp) => dateFormat(timestamp),
+    //get: (timestamp) => dateFormat(timestamp),
     set: Date.now
   },
 });
