@@ -128,7 +128,8 @@ const resolvers = {
           pixelId,
           {
             $set:{pixelColor, placementUser, coordinates}
-          }
+          },
+          {new:true}
         );
 
         // This tells the user object to set their lastUpdate value to the current time
