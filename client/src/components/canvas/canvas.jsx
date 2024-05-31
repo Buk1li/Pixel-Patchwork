@@ -8,17 +8,10 @@ import '../../assets/styles/canvas.css'
 import './canvas.css';
 
 const Canvas = () => {
-    //gets the pixel array
-    //const getPixels = useQuery(PIXELS);
+    const [pixelTarget, setPixelTarget] = useState(null);
 
-    //sets the target pistal state as an empty object by default
-    const [pixelTarget, setPixelTarget] = useState({});
-
-    //sets the pixel array state to a call to the server for the array
-    //const [pixelArray, setPixelArray] = useState(await getPixels());
-
-
-    const { loading, data } = useQuery(PIXELS);
+    // refetch is potentially very useful but I haven't been able to get it working correctly. For now, it is never used
+    let { loading, data, refetch } = useQuery(PIXELS);
 
     const pixelArray = data?.pixels || [];
 
@@ -28,19 +21,12 @@ const Canvas = () => {
                 {loading ? null
                 :(
                     pixelArray.map((pixel)=>{
-                        return (<Pixel pixelColor ={pixel.pixelColor} 
-                        placmentUser = {pixel.placmentUser} 
-                        coordinates = {pixel.coordinates} 
-                        updatedAt = {pixel.updatedAt} 
-                        pixelTarget={pixelTarget}
-                        setPixelTarget={setPixelTarget}
-                        key={pixel._id}>
-                        </Pixel>)
+                        return (<Pixel pixel={pixel} key={pixel._id} setPixelTarget={setPixelTarget}></Pixel>)
                     })
                 )}
             </div>
+            <ColorForm pixelTarget={pixelTarget} setPixelTarget={setPixelTarget}/>
         </Container>
-
     );
 };
 
