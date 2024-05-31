@@ -3,10 +3,10 @@ import { useState } from 'react';
 import {Button} from '@mui/material';
 import { UPDATE_PIXEL } from '../../utils/mutations';
 import { useMutation, useQuery } from '@apollo/client';
-import { QUERY_ME } from '../utils/queries';
+import { QUERY_ME } from '../../utils/queries';
 
 
-function ColorForm ({pixelTarget}) {
+function ColorForm ({pixelTarget, setPixelTarget}) {
     const [hex, setHex] = useState("#fff");
     const [disableAlpha, setDisableAlpha] = useState(false);
     const updatePixel = useMutation(UPDATE_PIXEL);

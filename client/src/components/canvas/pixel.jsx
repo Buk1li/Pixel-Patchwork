@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
-function Pixel ({pixelColor, placmentUser, coordinates, updatedAt, pixelTarget}) {
+function Pixel ({pixelColor, placmentUser, coordinates, updatedAt, pixelTarget, setPixelTarget}) {
     //creates color state
     const [colorState, setColorState] = useState(pixelColor);
 
@@ -25,7 +25,12 @@ function Pixel ({pixelColor, placmentUser, coordinates, updatedAt, pixelTarget})
       }));
 
       const handleClick = (event) =>{
-        
+        setPixelTarget ({
+          pixelColor: event.target.style.backgroundColor,
+          placmentUser: event.target.data-User,
+          coordinates: event.target.data-placement,
+          updatedAt: event.target.data-updatedAt
+        })
         // need to check if user is logged in
         //need to check if user has any more placements left
 

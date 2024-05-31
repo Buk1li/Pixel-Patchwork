@@ -58,3 +58,7 @@ export const QUERY_ME = gql`
     }
   }
 `;
+
+export const PIXELS = gql`
+
+`
