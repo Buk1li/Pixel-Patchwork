@@ -25,6 +25,7 @@ function Pixel ({pixelColor, placmentUser, coordinates, updatedAt, pixelTarget})
       }));
 
       const handleClick = (event) =>{
+        
         // need to check if user is logged in
         //need to check if user has any more placements left
 

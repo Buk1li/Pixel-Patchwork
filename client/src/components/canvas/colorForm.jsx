@@ -5,8 +5,6 @@ import { UPDATE_PIXEL } from '../../utils/mutations';
 import { useMutation, useQuery } from '@apollo/client';
 import { QUERY_ME } from '../utils/queries';
 
-import Auth from '../utils/auth';
-
 
 function ColorForm ({pixelTarget}) {
     const [hex, setHex] = useState("#fff");
@@ -15,12 +13,15 @@ function ColorForm ({pixelTarget}) {
     const getMe = useQuery(QUERY_ME);
 
     const handleColorChange = async (event) =>{
-        let me = await getMe()
-        setPixelColor({
+        let me = await getMe();
+        
+        setPixelTarget({
             pixelColor: hex, 
             placmentUser: me.username, 
-            coordinates, 
-            updatedAt})
+            coordinates: pixelTarget.coordinates,
+            updatedAt: Date.now
+        })
+        await updatePixel(pixelTarget);
     }
 
     return (
