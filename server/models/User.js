@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcrypt');
+const dateFormat = require('../utils/dateFormat');
 
 const userSchema = new Schema({
   username: {
@@ -21,6 +22,7 @@ const userSchema = new Schema({
   },
   lastUpdate: {
     type: Date,
+    default: 0,
     get: (timestamp) => dateFormat(timestamp)
   }
 });
@@ -38,8 +40,9 @@ userSchema.methods.isCorrectPassword = async function (password) {
   return bcrypt.compare(password, this.password);
 };
 
-userSchema.methods.updateTime = () =>{
-  this.lastUpdate = Date.now;
+userSchema.methods.updateTime = function(){
+  this.lastUpdate = Date.now();
+  this.save();
 }
 
 const User = model('User', userSchema);
