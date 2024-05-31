@@ -60,5 +60,13 @@ export const QUERY_ME = gql`
 `;
 
 export const PIXELS = gql`
-
+  query Pixels {
+    pixels {
+      _id
+      pixelColor
+      placementUser
+      coordinates
+      updatedAt
+    }
+  }
 `
