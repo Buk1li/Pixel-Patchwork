@@ -3,24 +3,25 @@ import { useState } from 'react';
 import {Button} from '@mui/material';
 import { UPDATE_PIXEL } from '../../utils/mutations';
 import { useMutation, useQuery } from '@apollo/client';
-import { QUERY_ME } from '../utils/queries';
-
-import Auth from '../utils/auth';
+import { QUERY_ME } from '../../utils/queries';
 
 
-function ColorForm ({pixelTarget}) {
+function ColorForm ({pixelTarget, setPixelTarget}) {
     const [hex, setHex] = useState("#fff");
     const [disableAlpha, setDisableAlpha] = useState(false);
     const updatePixel = useMutation(UPDATE_PIXEL);
     const getMe = useQuery(QUERY_ME);
 
     const handleColorChange = async (event) =>{
-        let me = await getMe()
-        setPixelColor({
+        let me = await getMe();
+        
+        setPixelTarget({
             pixelColor: hex, 
             placmentUser: me.username, 
-            coordinates, 
-            updatedAt})
+            coordinates: pixelTarget.coordinates,
+            updatedAt: Date.now
+        })
+        await updatePixel(pixelTarget);
     }
 
     return (

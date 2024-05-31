@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import './assets/styles/styles.css'
 import App from './App.jsx';
 import Home from './pages/Home';
+import Canvas from '../src/components/canvas/canvas.jsx'
 
 const router = createBrowserRouter([
   {
@@ -13,6 +14,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />
+      },
+      {
+        path: '/canvas',
+        element: <Canvas />
       }
     ]
   },
