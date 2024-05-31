@@ -25,7 +25,7 @@ const typeDefs = `
   type Pixel {
     _id: ID
     pixelColor: String!
-    placementUser: String!
+    placementUser: String
     coordinates: [Int]!
     updatedAt: String
   }

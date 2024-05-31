@@ -16,8 +16,7 @@ const pixelSchema = new Schema({
     required: true,
   },
   placementUser: {
-    type: String,
-    required: true,
+    type: String
   },
   coordinates: {
     type: Array,
