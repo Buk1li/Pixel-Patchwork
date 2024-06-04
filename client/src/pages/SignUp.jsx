@@ -12,16 +12,34 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+import {useMutation} from '@apollo/client';
+import {ADD_USER} from '../utils/mutations';
+
+import Auth from '../utils/auth';
+
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-  const handleSubmit = (event) => {
+
+  const [addUser, {error, data}] = useMutation(ADD_USER);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const inputData = new FormData(event.currentTarget);
+    try{
+      const {data} = await addUser({
+        variables: {
+          username: inputData.get('username'),
+          email: inputData.get('email'),
+          password: inputData.get('password')
+        }
+      })
+
+      Auth.login(data.addUser.token);
+    }
+    catch{
+      console.error(e);
+    }
   };
 
   return (
@@ -47,11 +65,11 @@ export default function SignUp() {
               <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="given-name"
-                  name="firstName"
+                  name="username"
                   required
                   fullWidth
-                  id="firstName"
-                  label="First Name"
+                  id="username"
+                  label="Username"
                   autoFocus
                 />
               </Grid>

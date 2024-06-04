@@ -88,7 +88,7 @@ const resolvers = {
       return Pixel.create({ pixelColor, placementUser, coordinates });
     },
     updatePixel: async (parent, { pixelId, pixelColor, placementUser, coordinates }, context) => {
-      // if(context.user){
+      if(context.user){
         const pixel = await Pixel.findByIdAndUpdate(
           pixelId,
           {
@@ -102,8 +102,8 @@ const resolvers = {
         user.updateTime();
 
         return pixel;
-      // }
-      // throw AuthenticationError;
+      }
+      throw AuthenticationError;
     },
   },
 };
