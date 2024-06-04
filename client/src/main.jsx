@@ -5,6 +5,7 @@ import './assets/styles/styles.css'
 import App from './App.jsx';
 import Home from './pages/Home';
 import Canvas from '../src/components/canvas/canvas.jsx'
+import Login from './pages/Login'
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
       {
         path: '/canvas',
         element: <Canvas />
+      },
+      {
+        path: '/login',
+        element: <Login />
       }
     ]
   },
