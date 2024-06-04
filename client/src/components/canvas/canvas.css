@@ -1,4 +1,4 @@
 #pixel-grid{
     display: grid;
-    grid-template-columns: repeat(5, 50px);
+    grid-template-columns: repeat(100, 5px);
 }

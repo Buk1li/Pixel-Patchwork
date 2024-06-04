@@ -7,14 +7,6 @@ const typeDefs = `
     lastUpdate: String
   }
 
-  type Thought {
-    _id: ID
-    thoughtText: String
-    thoughtAuthor: String
-    createdAt: String
-    comments: [Comment]!
-  }
-
   type Comment {
     _id: ID
     commentText: String
@@ -38,8 +30,8 @@ const typeDefs = `
   type Query {
     users: [User]
     user(username: String!): User
-    thoughts(username: String): [Thought]
-    thought(thoughtId: ID!): Thought
+    comments(username: String): [Comment]
+    comment(commentId: ID!): Comment
     me: User
     pixels: [Pixel]
   }
@@ -47,10 +39,8 @@ const typeDefs = `
   type Mutation {
     addUser(username: String!, email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
-    addThought(thoughtText: String!): Thought
-    addComment(thoughtId: ID!, commentText: String!): Thought
-    removeThought(thoughtId: ID!): Thought
-    removeComment(thoughtId: ID!, commentId: ID!): Thought
+    addComment(commentText: String!): Comment
+    removeComment(commentId: ID!): Comment
     addPixel(pixelId: ID!, pixelColor: String!, placementUser: String!, coordinates: [Int]!): Pixel
     updatePixel(pixelId: ID!, pixelColor: String!, placementUser: String!): Pixel
   }
