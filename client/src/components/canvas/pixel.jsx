@@ -12,8 +12,8 @@ function Pixel ({pixel, setPixelTarget}) {
     // makes color of the pixel equal to the color state
     const style = {
       backgroundColor: colorState,
-      width: '50px',
-      height: '50px'
+      width: '5px',
+      height: '5px'
     }
 
     // sets up styling for MUI tooltip
