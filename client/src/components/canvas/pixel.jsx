@@ -1,6 +1,6 @@
 
 import { styled } from '@mui/material/styles';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
@@ -14,6 +14,10 @@ function Pixel ({pixel, setPixelTarget}) {
     const [colorState, setColorState] = useState(pixel.pixelColor);
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+      console.log(Auth.getProfile().data);
+    }, [])
 
     // makes color of the pixel equal to the color state
     const style = {
@@ -45,13 +49,19 @@ function Pixel ({pixel, setPixelTarget}) {
         // add setColorState to the copy of pixel so that the color picker can access it
         temp.setColorState = setColorState;
         // set the pixelTarget state to the modified copy of pixel
-        setPixelTarget (temp);
+        setPixelTarget(temp);
 
         //need to check if user has any more placements left
       }
 
+      if(pixel.placementUser != null){
+        
+      }
     return (
-        <PixelTooltip title = {`placed by: ${pixel.placmentUser} at ${pixel.updatedAt}`}>
+        <PixelTooltip 
+        title = {pixel.placementUser != null 
+          ? `placed by: ${pixel.placementUser} at ${pixel.updatedAt}`
+        :null}>
           <div
             onClick={() => handleClick(pixel)}
             className={`pixel`} 
