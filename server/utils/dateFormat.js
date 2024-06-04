@@ -1,4 +1,5 @@
 const addDateSuffix = (date) => {
+  console.log(date);
   let dateStr = date.toString();
 
   // get last char of date string

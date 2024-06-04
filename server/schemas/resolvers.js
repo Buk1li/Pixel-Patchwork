@@ -88,7 +88,7 @@ const resolvers = {
       return Pixel.create({ pixelColor, placementUser, coordinates });
     },
     updatePixel: async (parent, { pixelId, pixelColor, placementUser, coordinates }, context) => {
-      // if(context.user){
+      if(context.user){
         const pixel = await Pixel.findByIdAndUpdate(
           pixelId,
           {
@@ -98,12 +98,19 @@ const resolvers = {
         );
 
         // This tells the user object to set their lastUpdate value to the current time
-        const user = await User.findOne({username: placementUser})
+        const user = await User.findOne({username: placementUser});
+
+        if (!user) {
+          throw AuthenticationError;
+        }
+
         user.updateTime();
 
-        return pixel;
-      // }
-      // throw AuthenticationError;
+        const token = signToken(user);
+
+        return {token, user};
+      }
+      throw AuthenticationError;
     },
   },
 };

@@ -23,6 +23,10 @@ class AuthService {
     return false;
   }
 
+  updateToken(idToken){
+    localStorage.setItem('id_token', idToken)
+  }
+
   getToken() {
     return localStorage.getItem('id_token');
   }

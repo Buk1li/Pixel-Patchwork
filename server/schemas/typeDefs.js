@@ -42,7 +42,7 @@ const typeDefs = `
     addComment(commentText: String!): Comment
     removeComment(commentId: ID!): Comment
     addPixel(pixelId: ID!, pixelColor: String!, placementUser: String!, coordinates: [Int]!): Pixel
-    updatePixel(pixelId: ID!, pixelColor: String!, placementUser: String!): Pixel
+    updatePixel(pixelId: ID!, pixelColor: String!, placementUser: String!): Auth
   }
 `;
 
