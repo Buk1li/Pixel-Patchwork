@@ -7,12 +7,29 @@ import { PIXELS } from '../../utils/queries';
 import '../../assets/styles/canvas.css'
 import './canvas.css';
 
-const Canvas = () =>{
-
+const Canvas = async () =>{
     const [pixelTarget, setPixelTarget] = useState(null);
+    const canvasRef = useRef(null);
     let { loading, data, refetch } = useQuery(PIXELS);
-    const pixelArray = data?.pixels || [];
+    let pixelArray = await data?.pixels || [];
 
+    //on load, construct the array
+    useEffect(()=>{
+        drawArray(canvasRef.current, pixelArray)
+    },[])
+
+    //function to contruct the canvas once we get the array.
+    const drawArray = (canvas, array)=>{
+        const ctx = canvas.getContext("2d");
+        for (let i = 0; i< array.length; i++){
+            let {coordinates, pixelColor }= array[i];
+            ctx.fillStyle = `${pixelColor}`
+            ctx.fillRect(coordinates[0]*10, coordinates[1]*10, 10, 10);
+
+        }
+
+    }
+//gets the mouses position relative to size (could prove problematic)
     function  getMousePos(evt) {
         let canvas = evt.target;
         let rect = canvas.getBoundingClientRect(), // abs. size of element
@@ -25,25 +42,15 @@ const Canvas = () =>{
         }
 
     }
-
+//used on each coordiante to make a coordinate that works with the grid and DB
     function findBestSquare(val){
         //first we get the remainder
         let remainder = val% 10
-        let rounded;
-        //decide whether to round up or down
-        if( remainder < 5){
-            //round down
-            rounded = (val - remainder)/10
-        } else{
-            //round up
-            rounded = (val - remainder + 10)/10;
-        }
-
-        
-
-
+        //then subtract and divide by ten
+        let rounded = (val - remainder)/10;
+        return rounded;
     }
-
+//handles click events
     function handleClick(evt){
         const canvas = evt.target
         const ctx = canvas.getContext('2d');
@@ -69,10 +76,12 @@ const Canvas = () =>{
         className={`kanvas`}
         width={1000}
         height={1000}
+        ref={canvasRef}
+        onClick={handleClick}
         ></canvas>
-        <ColorForm pixelTarget={pixelTarget} setPixelTarget={setPixelTarget}/>
+        <ColorForm pixelTarget={pixelTarget} canvas={canvasRef.current} setPixelTarget={setPixelTarget}/>
         </Container>
     )
 }
 
-export default Canvas
+export default Canvas;
