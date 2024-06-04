@@ -4,16 +4,22 @@ import { useState } from 'react';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
+import { useNavigate } from 'react-router-dom';
+
+import Auth from '../../utils/auth';
+
 
 function Pixel ({pixel, setPixelTarget}) {
     //creates color state
     const [colorState, setColorState] = useState(pixel.pixelColor);
 
+    const navigate = useNavigate();
+
     // makes color of the pixel equal to the color state
     const style = {
       backgroundColor: colorState,
-      width: '5px',
-      height: '5px'
+      width: '50px',
+      height: '50px'
     }
 
     // sets up styling for MUI tooltip
@@ -30,6 +36,10 @@ function Pixel ({pixel, setPixelTarget}) {
       }));
 
       const handleClick = (pixel) =>{
+        if(!Auth.loggedIn()){
+          navigate('/login');
+        }
+
         // create a copy of pixel that we can safely modify
         let temp = {...pixel};
         // add setColorState to the copy of pixel so that the color picker can access it
@@ -37,10 +47,7 @@ function Pixel ({pixel, setPixelTarget}) {
         // set the pixelTarget state to the modified copy of pixel
         setPixelTarget (temp);
 
-        // need to check if user is logged in
         //need to check if user has any more placements left
-
-        //if valid, pull up form for color (possibly using color wheel?)
       }
 
     return (
