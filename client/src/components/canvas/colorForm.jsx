@@ -11,22 +11,26 @@ import Auth from '../../utils/auth';
 function ColorForm ({pixelTarget, setPixelTarget}) {
     const [hex, setHex] = useState("#fff");
     const [disableAlpha, setDisableAlpha] = useState(false);
-    const [updatePixel, {error}] = useMutation(UPDATE_PIXEL);
-    //const getMe = useQuery(QUERY_ME);
+    const [updatePixel, {error, data}] = useMutation(UPDATE_PIXEL);
 
     const handleColorChange = async (event) =>{
-      // commented out because I don't want to deal with user stuff right now
-      //let me = await getMe();
       
       //setting the color state immediately changes the color
       pixelTarget.setColorState(hex);
 
       // updating the pixel in the database
-      updatePixel({variables:{  
-        pixelId: pixelTarget._id,
-        pixelColor: hex,
-        placementUser: Auth.getProfile().data.username,
-      }});
+      try{
+        const {data} = await updatePixel({variables:{  
+          pixelId: pixelTarget._id,
+          pixelColor: hex,
+          placementUser: Auth.getProfile().data.username,
+        }});
+
+        Auth.updateToken(data.updatePixel.token);
+      }
+      catch(e){
+        console.error(e);
+      }
 
       // clearing pixelTarget so that the color picker ceases to be visible
       setPixelTarget(null);

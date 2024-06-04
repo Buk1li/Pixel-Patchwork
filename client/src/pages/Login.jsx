@@ -54,18 +54,12 @@ export default function SignIn() {
           password: inputData.get('password')
         }
       });
-
+      
       Auth.login(data.login.token);
     }
-    catch{
+    catch(e){
       console.error(e);
     }
-
-    
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
   };
 
   return (

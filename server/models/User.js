@@ -21,9 +21,9 @@ const userSchema = new Schema({
     minlength: 5,
   },
   lastUpdate: {
-    type: Date,
+    type: Number,
     default: 0,
-    get: (timestamp) => dateFormat(timestamp)
+    //get: (timestamp) => dateFormat(timestamp)
   }
 });
 

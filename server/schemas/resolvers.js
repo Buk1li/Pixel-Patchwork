@@ -98,10 +98,17 @@ const resolvers = {
         );
 
         // This tells the user object to set their lastUpdate value to the current time
-        const user = await User.findOne({username: placementUser})
+        const user = await User.findOne({username: placementUser});
+
+        if (!user) {
+          throw AuthenticationError;
+        }
+
         user.updateTime();
 
-        return pixel;
+        const token = signToken(user);
+
+        return {token, user};
       }
       throw AuthenticationError;
     },
