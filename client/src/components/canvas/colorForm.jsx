@@ -3,7 +3,6 @@ import { useState } from 'react';
 import {Button} from '@mui/material';
 import { UPDATE_PIXEL } from '../../utils/mutations';
 import { useMutation, useQuery } from '@apollo/client';
-import { QUERY_ME } from '../../utils/queries';
 
 import Auth from '../../utils/auth';
 
@@ -26,6 +25,7 @@ function ColorForm ({pixelTarget, setPixelTarget}) {
           placementUser: Auth.getProfile().data.username,
         }});
 
+        // the time since last pixel update is stored in the token so it must be updated when a pixel is updated
         Auth.updateToken(data.updatePixel.token);
       }
       catch(e){

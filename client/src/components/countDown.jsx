@@ -10,8 +10,9 @@ const styles={
 }
 
 export default function CountDown(){
-    let [timer, setTimer] = useState("");
+    let [timer, setTimer] = useState("Loading...");
     
+    // updates the timer every half second
     useEffect(() => {
         setInterval(() => {
             let time = countDown();
@@ -22,7 +23,7 @@ export default function CountDown(){
                 setTimer("You may place a pixel");
             }
             else{
-                setTimer(`You may place a pixel in ${countDown()} seconds`);
+                setTimer(`You may place a pixel in ${time} seconds`);
             }
         }, 500)
     },[])

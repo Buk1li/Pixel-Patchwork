@@ -62,7 +62,7 @@ function Pixel ({pixel, setPixelTarget}) {
     return (
         <PixelTooltip 
         title = {pixel.placementUser != null 
-          ? `placed by: ${pixel.placementUser} at ${pixel.updatedAt}`
+          ? `Placed by: ${pixel.placementUser} on ${pixel.updatedAt}`
         :null}>
           <div
             onClick={() => handleClick(pixel)}
