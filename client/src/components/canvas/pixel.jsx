@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 
 import Auth from '../../utils/auth';
+import { countDown } from '../../utils/countDown';
 
 
 function Pixel ({pixel, setPixelTarget}) {
@@ -14,10 +15,6 @@ function Pixel ({pixel, setPixelTarget}) {
     const [colorState, setColorState] = useState(pixel.pixelColor);
 
     const navigate = useNavigate();
-
-    useEffect(() => {
-      console.log(Auth.getProfile().data);
-    }, [])
 
     // makes color of the pixel equal to the color state
     const style = {
@@ -44,6 +41,11 @@ function Pixel ({pixel, setPixelTarget}) {
           navigate('/login');
         }
 
+        if(countDown() > 0){
+          alert(`Cannot place another pixel for ${countDown()} seconds`);
+          return;
+        }
+
         // create a copy of pixel that we can safely modify
         let temp = {...pixel};
         // add setColorState to the copy of pixel so that the color picker can access it
@@ -60,7 +62,7 @@ function Pixel ({pixel, setPixelTarget}) {
     return (
         <PixelTooltip 
         title = {pixel.placementUser != null 
-          ? `placed by: ${pixel.placementUser} at ${pixel.updatedAt}`
+          ? `Placed by: ${pixel.placementUser} on ${pixel.updatedAt}`
         :null}>
           <div
             onClick={() => handleClick(pixel)}
