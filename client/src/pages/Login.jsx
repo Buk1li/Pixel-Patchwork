@@ -12,6 +12,11 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+import { useMutation } from '@apollo/client';
+import { LOGIN_USER } from '../utils/mutations';
+
+import Auth from '../utils/auth';
+
 // export default function LoginPage() {
     
 //   return (
@@ -35,9 +40,28 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-  const handleSubmit = (event) => {
+  const [login, {error, data}] = useMutation(LOGIN_USER);
+
+  
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    const inputData = new FormData(event.currentTarget);
+
+    try{
+      const {data} = await login({
+        variables: {
+          email: inputData.get('email'),
+          password: inputData.get('password')
+        }
+      });
+
+      Auth.login(data.login.token);
+    }
+    catch{
+      console.error(e);
+    }
+
+    
     console.log({
       email: data.get('email'),
       password: data.get('password'),
