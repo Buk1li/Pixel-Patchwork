@@ -8,25 +8,39 @@ import '../../assets/styles/canvas.css'
 import './canvas.css';
 
 const Canvas = async () =>{
+    //:::BUG:::\\ it yells at the state and ref for being null, 
+    //but that wasnt a problem before. Something with declaring 
+    //the ref to that canvas element is being funky 
     const [pixelTarget, setPixelTarget] = useState(null);
     const canvasRef = useRef(null);
-    let { loading, data, refetch } = useQuery(PIXELS);
-    let pixelArray = await data?.pixels || [];
-
-    //on load, construct the array
-    useEffect(()=>{
-        drawArray(canvasRef.current, pixelArray)
-    },[])
+    const { loading, error, data } = useQuery(PIXELS);
+    
+    let pixelArray = await data?.pixels || [{}];
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+    
+    // on load, construct the array
+    // useEffect(async()=>{
+    //     try{
+    //         let pixelArray = await data?.pixels || [{}];
+    //         console.log(data)
+    //         drawArray(canvasRef.current, pixelArray)
+    //     } catch(error){
+    //         console.log(error);
+    //     }
+    // },[])
 
     //function to contruct the canvas once we get the array.
-    const drawArray = (canvas, array)=>{
-        const ctx = canvas.getContext("2d");
-        for (let i = 0; i< array.length; i++){
-            let {coordinates, pixelColor }= array[i];
-            ctx.fillStyle = `${pixelColor}`
-            ctx.fillRect(coordinates[0]*10, coordinates[1]*10, 10, 10);
-
-        }
+    const drawArray = async (evt)=>{
+            let canvas = evt.target;
+            const ctx = canvas.getContext("2d");
+            for (let i = 0; i< pixelArray.length; i++){
+                let {coordinates, pixelColor }= pixelArray[i];
+                ctx.fillStyle = `${pixelColor}`
+                ctx.fillRect(coordinates[0]*10, coordinates[1]*10, 10, 10);
+                
+            }
 
     }
 //gets the mouses position relative to size (could prove problematic)
@@ -73,13 +87,14 @@ const Canvas = async () =>{
     return (
         <Container className={`canvas-wrapper`}>
         <canvas
-        className={`kanvas`}
         width={1000}
         height={1000}
         ref={canvasRef}
         onClick={handleClick}
+        onLoad={drawArray}
+        className={`kanvas`}
         ></canvas>
-        <ColorForm pixelTarget={pixelTarget} canvas={canvasRef.current} setPixelTarget={setPixelTarget}/>
+        <ColorForm pixelTarget={pixelTarget} canvas= {canvasRef} setPixelTarget={setPixelTarget}/>
         </Container>
     )
 }
