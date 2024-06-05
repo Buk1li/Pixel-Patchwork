@@ -4,8 +4,8 @@ const userSeeds = require('./userSeeds.json');
 const commentSeeds = require('./commentSeeds.json');
 const cleanDB = require('./cleanDB');
 
-const pixelWidth = 5;
-const pixelHeight = 5;
+const pixelWidth = 10;
+const pixelHeight = 10;
 
 db.once('open', async () => {
   try {

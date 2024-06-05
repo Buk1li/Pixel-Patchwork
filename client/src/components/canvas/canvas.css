@@ -8,6 +8,8 @@
     width: 1em;
 }
 
-.kanvas{
-    /* grid-template-columns: repeat(5, 50px); */
+.tooltip{
+    color: white;
+    background-color: grey;
+    max-width: 220px;
 }

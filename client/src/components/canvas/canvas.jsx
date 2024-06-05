@@ -4,45 +4,69 @@ import { Box, Checkbox, FormControlLabel, InputLabel, Container, Button } from '
 import ColorForm from './colorForm';
 import { useQuery } from '@apollo/client';
 import { PIXELS } from '../../utils/queries';
+import Auth from '../../utils/auth';
+import {countDown} from '../../utils/countDown';
 import '../../assets/styles/canvas.css'
 import './canvas.css';
+import { styled } from '@mui/material/styles';
+import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 
-const Canvas = async () =>{
-    //:::BUG:::\\ it yells at the state and ref for being null, 
-    //but that wasnt a problem before. Something with declaring 
-    //the ref to that canvas element is being funky 
+// this is the size of our pixels in real pixels
+const pixelSize = 25; 
+// This is the size of the canvas in our pixels (not real pixels)
+const canvasSize = 10;
+
+const Canvas = () =>{
+    //This state is just the coordinates of the pixel that was clicked on
     const [pixelTarget, setPixelTarget] = useState(null);
+
+    // This state is the info that should be displayed in the tooltip
+    const [tooltipData, setTooltipData] = useState(null);
     const canvasRef = useRef(null);
     const { loading, error, data } = useQuery(PIXELS);
     
-    let pixelArray = await data?.pixels || [{}];
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-    
+    // This state starts out as an empty 2D array the same size as the pixel grid
+    // it is later populated by the placementUser and updatedAt for each pixel
+    let [pixelArray2D, setPixelArray2D] = useState(() => {
+        let arr = [];
+        for(let i = 0; i < canvasSize; i++){
+            arr[i] = [];
+            for(let j = 0; j < canvasSize; j++){
+                arr[i][j] = {};
+            }
+        }
+        return arr;
+    });
+
+    let pixelArray = data?.pixels || [{}];
+
     // on load, construct the array
-    // useEffect(async()=>{
-    //     try{
-    //         let pixelArray = await data?.pixels || [{}];
-    //         console.log(data)
-    //         drawArray(canvasRef.current, pixelArray)
-    //     } catch(error){
-    //         console.log(error);
-    //     }
-    // },[])
+    useEffect(()=>{
+        console.log("draw array");
+        if(canvasRef.current){
+            drawArray();
+        }
+    },[data])
 
     //function to contruct the canvas once we get the array.
-    const drawArray = async (evt)=>{
-            let canvas = evt.target;
-            const ctx = canvas.getContext("2d");
-            for (let i = 0; i< pixelArray.length; i++){
-                let {coordinates, pixelColor }= pixelArray[i];
-                ctx.fillStyle = `${pixelColor}`
-                ctx.fillRect(coordinates[0]*10, coordinates[1]*10, 10, 10);
-                
-            }
+    const drawArray = ()=>{
+        let canvas = canvasRef.current;
+        const ctx = canvas.getContext("2d");
+        let arr = {...pixelArray2D};
+        for (let i = 0; i< pixelArray.length; i++){
+            let {coordinates, pixelColor }= pixelArray[i];
+            ctx.fillStyle = `${pixelColor}`
+            ctx.fillRect(coordinates[0]*pixelSize, coordinates[1]*pixelSize, pixelSize, pixelSize);
 
+            // This populates the pixelArray2D state with the placementUser and updatedAt for each pixel
+            arr[coordinates[0]][coordinates[1]] = {
+                placementUser: pixelArray[i].placementUser,
+                updatedAt: pixelArray[i].updatedAt
+            }
+        }
+        setPixelArray2D(arr);
     }
+
 //gets the mouses position relative to size (could prove problematic)
     function  getMousePos(evt) {
         let canvas = evt.target;
@@ -59,44 +83,85 @@ const Canvas = async () =>{
 //used on each coordiante to make a coordinate that works with the grid and DB
     function findBestSquare(val){
         //first we get the remainder
-        let remainder = val% 10
+        let remainder = val% pixelSize
         //then subtract and divide by ten
-        let rounded = (val - remainder)/10;
+        let rounded = (val - remainder)/pixelSize;
         return rounded;
     }
 //handles click events
     function handleClick(evt){
-        const canvas = evt.target
+        if(!Auth.loggedIn()){
+            navigate('/login');
+        }
+  
+        if(countDown() > 0){
+            alert(`Cannot place another pixel for ${countDown()} seconds`);
+            return;
+        }
+
+        const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
         let coords = getMousePos(evt);
         let x = findBestSquare(coords.x);
         let y = findBestSquare(coords.y);
         let coordinates = [x,y];
 
-        setPixelTarget(
-            {
-                coordinates: coordinates,
-                placementUser: '',
-                pixelColor: ''
-            }
-        )
+        setPixelTarget(coordinates);
     }
 
+    // This is called whenever the mouse is moved while over the canvas
+    function handleMouseOver(evt){
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext('2d');
+        let coords = getMousePos(evt);
+        let x = findBestSquare(coords.x);
+        let y = findBestSquare(coords.y);
 
+        // get tootip info from pixelArray2D and put it in the tooltipData state
+        const data = pixelArray2D[x][y];
+        if(data.placementUser != null){
+            setTooltipData(pixelArray2D[x][y]);
+        }
+        else {
+            setTooltipData(null);
+        }
+    }
+
+    // sets up styling for MUI tooltip
+    // not currently in use. I couldn't get it working so I just made my own tooltip
+    const PixelTooltip = styled(({ className, ...props }) => (
+        <Tooltip {...props} classes={{ popper: className }} />
+      ))(({ theme }) => ({
+        [`& .${tooltipClasses.tooltip}`]: {
+          backgroundColor: '#f5f5f9',
+          color: 'rgba(0, 0, 0, 0.87)',
+          maxWidth: 220,
+          fontSize: theme.typography.pxToRem(12),
+          border: '1px solid #dadde9',
+        },
+    }));
+
+    // all return statements must come after all hooks
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <Container className={`canvas-wrapper`}>
-        <canvas
-        width={1000}
-        height={1000}
-        ref={canvasRef}
-        onClick={handleClick}
-        onLoad={drawArray}
-        className={`kanvas`}
-        ></canvas>
-        <ColorForm pixelTarget={pixelTarget} canvas= {canvasRef} setPixelTarget={setPixelTarget}/>
+            <canvas
+                width={canvasSize * pixelSize}
+                height={canvasSize * pixelSize}
+                ref={canvasRef}
+                onClick={handleClick}
+                onMouseMove={evt => handleMouseOver(evt)}
+                onMouseLeave={() => setTooltipData(null)}
+                className={`kanvas`}
+            ></canvas>
+            <div className="tooltip">{tooltipData != null ? `Placed by: ${tooltipData.placementUser} on ${tooltipData.updatedAt}` :null}</div>
+            <ColorForm pixelTarget={pixelTarget} canvas={canvasRef} setPixelTarget={setPixelTarget} pixelSize={pixelSize} pixelArray2D={pixelArray2D} setPixelArray2D={setPixelArray2D}/>
         </Container>
     )
 }
+
 
 export default Canvas;
