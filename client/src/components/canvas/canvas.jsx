@@ -109,10 +109,14 @@ const Canvas = () =>{
         let coords = getMousePos(evt);
         let x = findBestSquare(coords.x);
         let y = findBestSquare(coords.y);
-        let coordinates = [x,y];
 
-        setTooltipData(pixelArray2D[x][y]);
-        console.log(pixelArray2D);
+        const data = pixelArray2D[x][y];
+        if(data.placementUser != null){
+            setTooltipData(pixelArray2D[x][y]);
+        }
+        else {
+            setTooltipData(null);
+        }
     }
 
     // sets up styling for MUI tooltip
