@@ -5,9 +5,9 @@ import { UPDATE_PIXEL } from '../../utils/mutations';
 import { useMutation, useQuery } from '@apollo/client';
 
 import Auth from '../../utils/auth';
+import dateFormat from '../../utils/dateFormat';
 
-
-function ColorForm ({pixelTarget, setPixelTarget, canvas, pixelSize}) {
+function ColorForm ({pixelTarget, setPixelTarget, canvas, pixelSize, pixelArray2D, setPixelArray2D}) {
     const [hex, setHex] = useState("#fff");
     const [disableAlpha, setDisableAlpha] = useState(false);
     const [updatePixel, {error, data}] = useMutation(UPDATE_PIXEL);
@@ -29,6 +29,13 @@ function ColorForm ({pixelTarget, setPixelTarget, canvas, pixelSize}) {
 
         // the time since last pixel update is stored in the token so it must be updated when a pixel is updated
         Auth.updateToken(data.updatePixel.token);
+
+        let arr = {...pixelArray2D};
+        arr[pixelTarget[0]][pixelTarget[1]] = {
+          placementUser: Auth.getProfile().data.username,
+          updatedAt: dateFormat(Date.now())
+        }
+        setPixelArray2D(arr);
       }
       catch(e){
         console.error(e);

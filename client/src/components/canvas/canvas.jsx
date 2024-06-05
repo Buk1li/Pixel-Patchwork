@@ -8,34 +8,57 @@ import Auth from '../../utils/auth';
 import {countDown} from '../../utils/countDown';
 import '../../assets/styles/canvas.css'
 import './canvas.css';
+import { styled } from '@mui/material/styles';
+import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 
-const pixelSize = 25;
+// this is the size of our pixels in real pixels
+const pixelSize = 25; 
+// This is the size of the canvas in our pixels (not real pixels)
 const canvasSize = 10;
 
 const Canvas = () =>{
     const [pixelTarget, setPixelTarget] = useState(null);
+    const [tooltipData, setTooltipData] = useState(null);
     const canvasRef = useRef(null);
     const { loading, error, data } = useQuery(PIXELS);
     
     let pixelArray = data?.pixels || [{}];
-    
+
+    let [pixelArray2D, setPixelArray2D] = useState(() => {
+        let arr = [];
+        for(let i = 0; i < canvasSize; i++){
+            arr[i] = [];
+            for(let j = 0; j < canvasSize; j++){
+                arr[i][j] = {};
+            }
+        }
+        return arr;
+    });
+
     // on load, construct the array
     useEffect(()=>{
-        console.log(data)
-        drawArray();
+        console.log("draw array");
+        if(canvasRef.current){
+            drawArray();
+        }
     },[data])
 
     //function to contruct the canvas once we get the array.
     const drawArray = ()=>{
         let canvas = canvasRef.current;
-        if(!canvas) return;
-        console.log(canvas);
         const ctx = canvas.getContext("2d");
+        let arr = {...pixelArray2D};
         for (let i = 0; i< pixelArray.length; i++){
             let {coordinates, pixelColor }= pixelArray[i];
             ctx.fillStyle = `${pixelColor}`
             ctx.fillRect(coordinates[0]*pixelSize, coordinates[1]*pixelSize, pixelSize, pixelSize);
+
+            arr[coordinates[0]][coordinates[1]] = {
+                placementUser: pixelArray[i].placementUser,
+                updatedAt: pixelArray[i].updatedAt
+            }
         }
+        setPixelArray2D(arr);
     }
 
 //gets the mouses position relative to size (could prove problematic)
@@ -77,9 +100,33 @@ const Canvas = () =>{
         let y = findBestSquare(coords.y);
         let coordinates = [x,y];
 
-        console.log(coordinates); 
         setPixelTarget(coordinates);
     }
+
+    function handleMouseOver(evt){
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext('2d');
+        let coords = getMousePos(evt);
+        let x = findBestSquare(coords.x);
+        let y = findBestSquare(coords.y);
+        let coordinates = [x,y];
+
+        setTooltipData(pixelArray2D[x][y]);
+        console.log(pixelArray2D);
+    }
+
+    // sets up styling for MUI tooltip
+    const PixelTooltip = styled(({ className, ...props }) => (
+        <Tooltip {...props} classes={{ popper: className }} />
+      ))(({ theme }) => ({
+        [`& .${tooltipClasses.tooltip}`]: {
+          backgroundColor: '#f5f5f9',
+          color: 'rgba(0, 0, 0, 0.87)',
+          maxWidth: 220,
+          fontSize: theme.typography.pxToRem(12),
+          border: '1px solid #dadde9',
+        },
+    }));
 
     // all return statements must come after all hooks
     if (loading) {
@@ -93,12 +140,15 @@ const Canvas = () =>{
                 height={canvasSize * pixelSize}
                 ref={canvasRef}
                 onClick={handleClick}
-                onLoad={drawArray}
+                onMouseMove={evt => handleMouseOver(evt)}
+                onMouseLeave={() => setTooltipData(null)}
                 className={`kanvas`}
             ></canvas>
-            <ColorForm pixelTarget={pixelTarget} canvas={canvasRef} setPixelTarget={setPixelTarget} pixelSize={pixelSize}/>
+            <div className="tooltip">{tooltipData != null ? `Placed by: ${tooltipData.placementUser} on ${tooltipData.updatedAt}` :null}</div>
+            <ColorForm pixelTarget={pixelTarget} canvas={canvasRef} setPixelTarget={setPixelTarget} pixelSize={pixelSize} pixelArray2D={pixelArray2D} setPixelArray2D={setPixelArray2D}/>
         </Container>
     )
 }
+
 
 export default Canvas;
