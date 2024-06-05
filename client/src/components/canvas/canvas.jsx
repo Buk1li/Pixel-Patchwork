@@ -17,13 +17,16 @@ const pixelSize = 25;
 const canvasSize = 10;
 
 const Canvas = () =>{
+    //This state is just the coordinates of the pixel that was clicked on
     const [pixelTarget, setPixelTarget] = useState(null);
+
+    // This state is the info that should be displayed in the tooltip
     const [tooltipData, setTooltipData] = useState(null);
     const canvasRef = useRef(null);
     const { loading, error, data } = useQuery(PIXELS);
     
-    let pixelArray = data?.pixels || [{}];
-
+    // This state starts out as an empty 2D array the same size as the pixel grid
+    // it is later populated by the placementUser and updatedAt for each pixel
     let [pixelArray2D, setPixelArray2D] = useState(() => {
         let arr = [];
         for(let i = 0; i < canvasSize; i++){
@@ -34,6 +37,8 @@ const Canvas = () =>{
         }
         return arr;
     });
+
+    let pixelArray = data?.pixels || [{}];
 
     // on load, construct the array
     useEffect(()=>{
@@ -53,6 +58,7 @@ const Canvas = () =>{
             ctx.fillStyle = `${pixelColor}`
             ctx.fillRect(coordinates[0]*pixelSize, coordinates[1]*pixelSize, pixelSize, pixelSize);
 
+            // This populates the pixelArray2D state with the placementUser and updatedAt for each pixel
             arr[coordinates[0]][coordinates[1]] = {
                 placementUser: pixelArray[i].placementUser,
                 updatedAt: pixelArray[i].updatedAt
@@ -103,6 +109,7 @@ const Canvas = () =>{
         setPixelTarget(coordinates);
     }
 
+    // This is called whenever the mouse is moved while over the canvas
     function handleMouseOver(evt){
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
@@ -110,6 +117,7 @@ const Canvas = () =>{
         let x = findBestSquare(coords.x);
         let y = findBestSquare(coords.y);
 
+        // get tootip info from pixelArray2D and put it in the tooltipData state
         const data = pixelArray2D[x][y];
         if(data.placementUser != null){
             setTooltipData(pixelArray2D[x][y]);
@@ -120,6 +128,7 @@ const Canvas = () =>{
     }
 
     // sets up styling for MUI tooltip
+    // not currently in use. I couldn't get it working so I just made my own tooltip
     const PixelTooltip = styled(({ className, ...props }) => (
         <Tooltip {...props} classes={{ popper: className }} />
       ))(({ theme }) => ({

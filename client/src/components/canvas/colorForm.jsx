@@ -18,7 +18,7 @@ function ColorForm ({pixelTarget, setPixelTarget, canvas, pixelSize, pixelArray2
       const ctx = canvas.current.getContext("2d");
       ctx.fillStyle = `${hex}`;
       ctx.fillRect(pixelTarget[0]*pixelSize, pixelTarget[1]*pixelSize, pixelSize, pixelSize);
-      console.log(pixelTarget);
+
       // updating the pixel in the database
       try{
         const {data} = await updatePixel({variables:{  
@@ -30,6 +30,7 @@ function ColorForm ({pixelTarget, setPixelTarget, canvas, pixelSize, pixelArray2
         // the time since last pixel update is stored in the token so it must be updated when a pixel is updated
         Auth.updateToken(data.updatePixel.token);
 
+        //update the info in pixelArray2D so that if the user hovers over the pixel they just placed it will be correct
         let arr = {...pixelArray2D};
         arr[pixelTarget[0]][pixelTarget[1]] = {
           placementUser: Auth.getProfile().data.username,
