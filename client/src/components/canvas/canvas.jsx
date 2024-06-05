@@ -4,6 +4,8 @@ import { Box, Checkbox, FormControlLabel, InputLabel, Container, Button } from '
 import ColorForm from './colorForm';
 import { useQuery } from '@apollo/client';
 import { PIXELS } from '../../utils/queries';
+import Auth from '../../utils/auth';
+import {countDown} from '../../utils/countDown';
 import '../../assets/styles/canvas.css'
 import './canvas.css';
 
@@ -33,7 +35,6 @@ const Canvas = () =>{
             let {coordinates, pixelColor }= pixelArray[i];
             ctx.fillStyle = `${pixelColor}`
             ctx.fillRect(coordinates[0]*pixelSize, coordinates[1]*pixelSize, pixelSize, pixelSize);
-            
         }
     }
 
@@ -53,27 +54,31 @@ const Canvas = () =>{
 //used on each coordiante to make a coordinate that works with the grid and DB
     function findBestSquare(val){
         //first we get the remainder
-        let remainder = val% 10
+        let remainder = val% pixelSize
         //then subtract and divide by ten
-        let rounded = (val - remainder)/10;
+        let rounded = (val - remainder)/pixelSize;
         return rounded;
     }
 //handles click events
     function handleClick(evt){
-        const canvas = evt.target
+        if(!Auth.loggedIn()){
+            navigate('/login');
+        }
+  
+        if(countDown() > 0){
+            alert(`Cannot place another pixel for ${countDown()} seconds`);
+            return;
+        }
+
+        const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
         let coords = getMousePos(evt);
         let x = findBestSquare(coords.x);
         let y = findBestSquare(coords.y);
         let coordinates = [x,y];
 
-        setPixelTarget(
-            {
-                coordinates: coordinates,
-                placementUser: '',
-                pixelColor: ''
-            }
-        )
+        console.log(coordinates); 
+        setPixelTarget(coordinates);
     }
 
     // all return statements must come after all hooks
@@ -91,7 +96,7 @@ const Canvas = () =>{
                 onLoad={drawArray}
                 className={`kanvas`}
             ></canvas>
-            <ColorForm pixelTarget={pixelTarget} canvas={canvasRef} setPixelTarget={setPixelTarget}/>
+            <ColorForm pixelTarget={pixelTarget} canvas={canvasRef} setPixelTarget={setPixelTarget} pixelSize={pixelSize}/>
         </Container>
     )
 }

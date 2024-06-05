@@ -7,7 +7,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import Auth from '../../utils/auth';
 
 
-function ColorForm ({pixelTarget, setPixelTarget, canvas}) {
+function ColorForm ({pixelTarget, setPixelTarget, canvas, pixelSize}) {
     const [hex, setHex] = useState("#fff");
     const [disableAlpha, setDisableAlpha] = useState(false);
     const [updatePixel, {error, data}] = useMutation(UPDATE_PIXEL);
@@ -15,14 +15,14 @@ function ColorForm ({pixelTarget, setPixelTarget, canvas}) {
     const handleColorChange = async (event) =>{
       
       //setting the color state immediately changes the color
-      let temp = {...pixelTarget};
       const ctx = canvas.current.getContext("2d");
       ctx.fillStyle = `${hex}`;
-      ctx.fillRect(temp.coordinates[0]*10, temp.coordinates[1]*10, 10, 10);
+      ctx.fillRect(pixelTarget[0]*pixelSize, pixelTarget[1]*pixelSize, pixelSize, pixelSize);
+      console.log(pixelTarget);
       // updating the pixel in the database
       try{
         const {data} = await updatePixel({variables:{  
-          pixelId: pixelTarget._id,
+          coordinates: pixelTarget,
           pixelColor: hex,
           placementUser: Auth.getProfile().data.username,
         }});

@@ -1,6 +1,6 @@
 import Auth from './auth';
 
-const timeLimit = 30000;
+const timeLimit = 3000;
 
 // returns the time in seconds until another pixel can be placed.
 // can return negative numbers
