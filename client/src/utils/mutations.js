@@ -56,13 +56,13 @@ export const ADD_COMMENT = gql`
 `;
 
 export const  UPDATE_PIXEL = gql`
-mutation Mutation($pixelId: ID!, $pixelColor: String!, $placementUser: String!) {
-  updatePixel(pixelId: $pixelId, pixelColor: $pixelColor, placementUser: $placementUser) {
+mutation Mutation($coordinates: [Int]!, $pixelColor: String!, $placementUser: String!) {
+  updatePixel(coordinates: $coordinates, pixelColor: $pixelColor, placementUser: $placementUser) {
     token
     user {
       _id
-      username
       lastUpdate
+      username
     }
   }
 }

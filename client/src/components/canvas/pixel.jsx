@@ -34,31 +34,31 @@ function Pixel ({pixel, setPixelTarget}) {
           fontSize: theme.typography.pxToRem(12),
           border: '1px solid #dadde9',
         },
-      }));
+    }));
 
-      const handleClick = (pixel) =>{
-        if(!Auth.loggedIn()){
-          navigate('/login');
-        }
-
-        if(countDown() > 0){
-          alert(`Cannot place another pixel for ${countDown()} seconds`);
-          return;
-        }
-
-        // create a copy of pixel that we can safely modify
-        let temp = {...pixel};
-        // add setColorState to the copy of pixel so that the color picker can access it
-        temp.setColorState = setColorState;
-        // set the pixelTarget state to the modified copy of pixel
-        setPixelTarget(temp);
-
-        //need to check if user has any more placements left
+    const handleClick = (pixel) =>{
+      if(!Auth.loggedIn()){
+        navigate('/login');
       }
 
-      if(pixel.placementUser != null){
-        
+      if(countDown() > 0){
+        alert(`Cannot place another pixel for ${countDown()} seconds`);
+        return;
       }
+
+      // create a copy of pixel that we can safely modify
+      let temp = {...pixel};
+      // add setColorState to the copy of pixel so that the color picker can access it
+      temp.setColorState = setColorState;
+      // set the pixelTarget state to the modified copy of pixel
+      setPixelTarget(temp);
+
+      //need to check if user has any more placements left
+    }
+
+    if(pixel.placementUser != null){
+      
+    }
     return (
         <PixelTooltip 
         title = {pixel.placementUser != null 

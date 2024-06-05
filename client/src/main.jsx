@@ -7,11 +7,13 @@ import Home from './pages/Home';
 import Canvas from '../src/components/canvas/canvas.jsx'
 import Login from './pages/Login'
 import SignUp from './pages/SignUp'
+import ErrorPage from './pages/Error.jsx';
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,

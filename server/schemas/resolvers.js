@@ -87,10 +87,10 @@ const resolvers = {
     addPixel: async (parent, { pixelColor, placementUser, coordinates }) => {
       return Pixel.create({ pixelColor, placementUser, coordinates });
     },
-    updatePixel: async (parent, { pixelId, pixelColor, placementUser, coordinates }, context) => {
+    updatePixel: async (parent, { pixelColor, placementUser, coordinates }, context) => {
       if(context.user){
-        const pixel = await Pixel.findByIdAndUpdate(
-          pixelId,
+        const pixel = await Pixel.findOneAndUpdate(
+          {coordinates: coordinates},
           {
             $set:{pixelColor, placementUser, coordinates, updatedAt: Date.now()}
           },

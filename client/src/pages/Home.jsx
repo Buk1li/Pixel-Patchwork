@@ -1,6 +1,5 @@
 import { useQuery } from '@apollo/client';
 import Canvas from '../components/canvas/canvas';
-
 import { QUERY_THOUGHTS } from '../utils/queries';
 import CountDown from '../components/countDown';
 
