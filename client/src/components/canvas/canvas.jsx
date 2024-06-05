@@ -10,6 +10,7 @@ import '../../assets/styles/canvas.css'
 import './canvas.css';
 import { styled } from '@mui/material/styles';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
+import { useNavigate } from 'react-router-dom';
 
 // this is the size of our pixels in real pixels
 const pixelSize = 25; 
@@ -37,6 +38,8 @@ const Canvas = () =>{
         }
         return arr;
     });
+
+    const navigate = useNavigate();
 
     let pixelArray = data?.pixels || [{}];
 
