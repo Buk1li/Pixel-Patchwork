@@ -7,42 +7,36 @@ import { PIXELS } from '../../utils/queries';
 import '../../assets/styles/canvas.css'
 import './canvas.css';
 
-const Canvas = async () =>{
-    //:::BUG:::\\ it yells at the state and ref for being null, 
-    //but that wasnt a problem before. Something with declaring 
-    //the ref to that canvas element is being funky 
+const pixelSize = 25;
+const canvasSize = 10;
+
+const Canvas = () =>{
     const [pixelTarget, setPixelTarget] = useState(null);
     const canvasRef = useRef(null);
     const { loading, error, data } = useQuery(PIXELS);
     
-    let pixelArray = await data?.pixels || [{}];
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+    let pixelArray = data?.pixels || [{}];
     
     // on load, construct the array
-    // useEffect(async()=>{
-    //     try{
-    //         let pixelArray = await data?.pixels || [{}];
-    //         console.log(data)
-    //         drawArray(canvasRef.current, pixelArray)
-    //     } catch(error){
-    //         console.log(error);
-    //     }
-    // },[])
+    useEffect(()=>{
+        console.log(data)
+        drawArray();
+    },[data])
 
     //function to contruct the canvas once we get the array.
-    const drawArray = async (evt)=>{
-            let canvas = evt.target;
-            const ctx = canvas.getContext("2d");
-            for (let i = 0; i< pixelArray.length; i++){
-                let {coordinates, pixelColor }= pixelArray[i];
-                ctx.fillStyle = `${pixelColor}`
-                ctx.fillRect(coordinates[0]*10, coordinates[1]*10, 10, 10);
-                
-            }
-
+    const drawArray = ()=>{
+        let canvas = canvasRef.current;
+        if(!canvas) return;
+        console.log(canvas);
+        const ctx = canvas.getContext("2d");
+        for (let i = 0; i< pixelArray.length; i++){
+            let {coordinates, pixelColor }= pixelArray[i];
+            ctx.fillStyle = `${pixelColor}`
+            ctx.fillRect(coordinates[0]*pixelSize, coordinates[1]*pixelSize, pixelSize, pixelSize);
+            
+        }
     }
+
 //gets the mouses position relative to size (could prove problematic)
     function  getMousePos(evt) {
         let canvas = evt.target;
@@ -82,19 +76,22 @@ const Canvas = async () =>{
         )
     }
 
-
+    // all return statements must come after all hooks
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <Container className={`canvas-wrapper`}>
-        <canvas
-        width={1000}
-        height={1000}
-        ref={canvasRef}
-        onClick={handleClick}
-        onLoad={drawArray}
-        className={`kanvas`}
-        ></canvas>
-        <ColorForm pixelTarget={pixelTarget} canvas= {canvasRef} setPixelTarget={setPixelTarget}/>
+            <canvas
+                width={canvasSize * pixelSize}
+                height={canvasSize * pixelSize}
+                ref={canvasRef}
+                onClick={handleClick}
+                onLoad={drawArray}
+                className={`kanvas`}
+            ></canvas>
+            <ColorForm pixelTarget={pixelTarget} canvas={canvasRef} setPixelTarget={setPixelTarget}/>
         </Container>
     )
 }
