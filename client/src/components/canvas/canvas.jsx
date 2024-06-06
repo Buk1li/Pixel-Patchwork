@@ -1,6 +1,6 @@
 import { height, width } from "@mui/system";
 import React, { useRef, useEffect, useState } from 'react';
-import { Box, Checkbox, FormControlLabel, InputLabel, Container, Button } from '@mui/material';
+import { Box, Checkbox, FormControlLabel, InputLabel, Container, Button, CircularProgress, Backdrop } from '@mui/material';
 import ColorForm from './colorForm';
 import { useQuery } from '@apollo/client';
 import { PIXELS } from '../../utils/queries';
@@ -130,6 +130,9 @@ const Canvas = () =>{
         }
     }
 
+    const handleClose = (evt) =>{
+        setPixelTarget(null);
+    }
     // sets up styling for MUI tooltip
     // not currently in use. I couldn't get it working so I just made my own tooltip
     const PixelTooltip = styled(({ className, ...props }) => (
@@ -146,7 +149,7 @@ const Canvas = () =>{
 
     // all return statements must come after all hooks
     if (loading) {
-        return <div>Loading...</div>;
+        return <CircularProgress color="inherit" />;
     }
 
     return (
@@ -164,7 +167,14 @@ const Canvas = () =>{
                 className={`kanvas`}
             ></canvas>
             <Box className="tooltip">{tooltipData != null ? `Placed by: ${tooltipData.placementUser} on ${tooltipData.updatedAt}` :null}</Box>
+            <Backdrop
+  sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+  open={pixelTarget}
+  onClick={handleClose}
+>
+
             <ColorForm pixelTarget={pixelTarget} canvas={canvasRef} setPixelTarget={setPixelTarget} pixelSize={pixelSize} pixelArray2D={pixelArray2D} setPixelArray2D={setPixelArray2D}/>
+</Backdrop>
         </Container>
     )
 }
