@@ -17,27 +17,11 @@ import { LOGIN_USER } from '../utils/mutations';
 
 import Auth from '../utils/auth';
 
-// export default function LoginPage() {
-    
-//   return (
-//     < >
-//       <CssBaseline />
-//       <Container component="main" maxWidth="xs">
-//         <Box sx={{ bgcolor: '#cfe8fc', height: '100vh' }} />
-//         <Box
-//           sx={{
-//             marginTop: 8,
-//             display: 'flex',
-//             flexDirection: 'column',
-//             alignItems: 'center',
-//           }}
-//         />
-//       </Container>
-//     </ >
-//   );
-// }
-
-const defaultTheme = createTheme();
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
 
 export default function SignIn() {
   const [login, {error, data}] = useMutation(LOGIN_USER);
@@ -63,7 +47,7 @@ export default function SignIn() {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={darkTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -74,9 +58,6 @@ export default function SignIn() {
             alignItems: 'center',
           }}
         >
-          {/* <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar> */}
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
@@ -101,10 +82,7 @@ export default function SignIn() {
               id="password"
               autoComplete="current-password"
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
+      
             <Button
               type="submit"
               fullWidth
@@ -114,20 +92,9 @@ export default function SignIn() {
               Sign In
             </Button>
             <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
             </Grid>
           </Box>
         </Box>
-        {/* <Copyright sx={{ mt: 8, mb: 4 }} /> */}
       </Container>
     </ThemeProvider>
   );
