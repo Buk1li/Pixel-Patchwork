@@ -16,6 +16,17 @@ const httpLink = createHttpLink({
   uri: '/graphql',
 });
 
+const font =  "'Pixelify Sans', sans-serif";
+
+const theme = createMuiTheme({
+  typography: {
+    fontFamily: [
+      'Pixelify Sans',
+      'normal'
+    ].join(',')
+  }
+});
+
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('id_token');
   return {
