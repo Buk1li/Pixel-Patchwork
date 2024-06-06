@@ -147,7 +147,10 @@ const Canvas = () =>{
     }
 
     return (
-        <Container className={`canvas-wrapper`}>
+        <Container sx={{
+            display: 'flex',
+            justifyContent: 'center',
+        }}>
             <canvas
                 width={canvasSize * pixelSize}
                 height={canvasSize * pixelSize}
@@ -157,7 +160,7 @@ const Canvas = () =>{
                 onMouseLeave={() => setTooltipData(null)}
                 className={`kanvas`}
             ></canvas>
-            <div className="tooltip">{tooltipData != null ? `Placed by: ${tooltipData.placementUser} on ${tooltipData.updatedAt}` :null}</div>
+            <Box className="tooltip">{tooltipData != null ? `Placed by: ${tooltipData.placementUser} on ${tooltipData.updatedAt}` :null}</Box>
             <ColorForm pixelTarget={pixelTarget} canvas={canvasRef} setPixelTarget={setPixelTarget} pixelSize={pixelSize} pixelArray2D={pixelArray2D} setPixelArray2D={setPixelArray2D}/>
         </Container>
     )
