@@ -2,9 +2,15 @@
     margin: 0;
     padding: 0;
   }
-  
-  body {
-    background: #637d63;
+
+  .blue {
+    color:#2d3e50;
+  }
+  .dark {
+    color:#1a1a1a; 
+  }
+  main{
+    background-color: #1a1a1a;
   }
   
   .App {
