@@ -12,7 +12,8 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 import Header from './components/Header';
 import Footer from './components/Footer';
-import Chat from './components/Chat';
+
+import {useEffect} from 'react';
 
 const httpLink = createHttpLink({
   uri: '/graphql',
@@ -52,6 +53,10 @@ const darkTheme = createTheme({
 });
 
 function App() {
+  useEffect(() =>{
+
+  },[])
+
   return (
     <ApolloProvider client={client}>
       <ThemeProvider theme={darkTheme}>
@@ -62,7 +67,6 @@ function App() {
         <div className="">
           <Outlet />
         </div>
-        <Chat />
       </div>
       </ThemeProvider>
     </ApolloProvider>

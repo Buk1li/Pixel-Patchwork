@@ -1,30 +1,45 @@
 import React, { useState, useEffect } from 'react';
-import io from 'socket.io-client';
+import Auth from '../utils/auth';
+import { useQuery } from '@apollo/client';
 
-const socket = io();
+import {COMMENTS} from '../utils/queries';
 
-const Chat = () => {
+const Chat = ({socket}) => {
     const [message, setMessage] = useState('');
     const [chat, setChat] = useState([]);
     const [name, setName] = useState('');
+    const {loading, error, data} = useQuery(COMMENTS);
+
+    if(!Auth.loggedIn()){
+        return null;
+    }
 
     useEffect(() => {
-        const userName = prompt('What is your name?');
-        setName(userName);
-        socket.emit('new-user', userName);
-    }, []);
+        if(data){
+            let oldChat = [];
+            for(let i = 0; i < data.comments.length; i++){
+                oldChat.unshift(`${data.comments[i].commentAuthor}: ${data.comments[i].commentText}`)
+            }
+            setChat(oldChat);
+        }
+    }, [data])
+
+    useEffect(() => {
+        setName(Auth.getProfile().data.username);
+        socket.emit('new-user', Auth.getProfile().data.username);
+    },[])
 
     useEffect(() => {
         socket.on('chat-message', (data) => {
-            setChat([...chat, `${data.name}: ${data.message}`]);
+            setChat(chat => [...chat, `${data.name}: ${data.message}`])
         });
         socket.on('user-connected', (name) => {
-            setChat([...chat, `${name} connected`]);
+            setChat(chat => [...chat, `${name} connected`]);
         });
         socket.on('user-disconnected', (name) => {
-            setChat([...chat, `${name} disconnected`]);
+            setChat(chat => [...chat, `${name} disconnected`]);
         });
-    }, [chat]);
+    }, []);
 
     const sendMessage = (e) => {
         e.preventDefault();
