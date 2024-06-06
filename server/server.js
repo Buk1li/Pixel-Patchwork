@@ -1,12 +1,13 @@
 const express = require('express');
 const http = require('http');
-const socketIo = require('socket.io');
+const {Server} = require('socket.io');
 const path = require('path');
 const { ApolloServer } = require('@apollo/server');
 const { expressMiddleware } = require('@apollo/server/express4');
 const { authMiddleware } = require('./utils/auth');
 const { typeDefs, resolvers } = require('./schemas');
 const db = require('./config/connection');
+const { User, Comment, Pixel } = require('./models');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -16,7 +17,11 @@ const server = new ApolloServer({
 });
 
 const httpServer = http.createServer(app);
-const io = socketIo(httpServer);
+const io = new Server(httpServer, {
+  cors: {
+    origin: "http://localhost:3000"
+  }
+});
 
 const users = {};
 
@@ -26,6 +31,21 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('user-connected', name);
   });
   socket.on('send-chat-message', (message) => {
+    const addComment = async () => {
+      console.log(users[socket.id]);
+      const comment = await Comment.create({
+        commentText: message,
+        commentAuthor: users[socket.id],
+      });
+
+      await User.findOneAndUpdate(
+        { username: users[socket.id] },
+        { $addToSet: { comments: comment._id } }
+      );
+
+      return comment;
+    }
+    addComment();
     socket.broadcast.emit('chat-message', { message, name: users[socket.id] });
   });
   socket.on('disconnect', () => {
