@@ -31,13 +31,13 @@ const Chat = ({socket}) => {
 
     useEffect(() => {
         socket.on('chat-message', (data) => {
-            setChat([...chat, `${data.name}: ${data.message}`]);
+            setChat(chat => [...chat, `${data.name}: ${data.message}`])
         });
         socket.on('user-connected', (name) => {
-            setChat([...chat, `${name} connected`]);
+            setChat(chat => [...chat, `${name} connected`]);
         });
         socket.on('user-disconnected', (name) => {
-            setChat([...chat, `${name} disconnected`]);
+            setChat(chat => [...chat, `${name} disconnected`]);
         });
     }, []);
 
