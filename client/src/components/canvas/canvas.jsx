@@ -147,7 +147,15 @@ const Canvas = () =>{
 
     // all return statements must come after all hooks
     if (loading) {
-        return <CircularProgress color="inherit" />;
+        return (
+
+            <Container sx={{
+                display: 'flex',
+                justifyContent: 'center',
+            }}>
+            <CircularProgress color="inherit" />;
+        </Container>
+        )
     }
 
     return (
