@@ -156,6 +156,9 @@ const Canvas = () =>{
                 justifyContent: 'center',
             }}>
             <canvas
+                style={{
+                    border: '0.5em ridge #2d3e50'
+                }}
                 width={canvasSize * pixelSize}
                 height={canvasSize * pixelSize}
                 ref={canvasRef}
