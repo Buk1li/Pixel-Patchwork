@@ -13,6 +13,9 @@ const Header = () => {
     color: '#fff',
   }
 
+  const paperStyle ={
+    padding: '0.8em',
+  }
 
 
   const logout = (event) => {
@@ -57,14 +60,14 @@ const Header = () => {
                 alignItems="center"
                 spacing={1}>
                 <Grid item xs={4}>
-                  <Paper>
+                  <Paper sx={paperStyle} elevation={3} square={false}>
                     <Link sx={linkStyle} to="/login">
                       Login
                     </Link>
                   </Paper>
                 </Grid>
                 <Grid item xs={4}>
-                  <Paper>
+                  <Paper sx={paperStyle} elevation={3} square= {false}>
                     <Link sx={linkStyle} to="/signup">
                       Signup
                     </Link>

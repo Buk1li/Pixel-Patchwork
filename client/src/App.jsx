@@ -20,7 +20,7 @@ const httpLink = createHttpLink({
 
 const font =  "'Pixelify Sans', sans-serif";
 
-const theme = createMuiTheme({
+const theme = createTheme({
   typography: {
     fontFamily: [
       'Pixelify Sans',
