@@ -151,9 +151,9 @@ const Canvas = () =>{
 
     return (
         <Container sx={{
-            display: 'flex',
-            justifyContent: 'center',
-        }}>
+                display: 'flex',
+                justifyContent: 'center',
+            }}>
             <canvas
                 width={canvasSize * pixelSize}
                 height={canvasSize * pixelSize}

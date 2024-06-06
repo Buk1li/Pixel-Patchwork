@@ -32,7 +32,6 @@ io.on('connection', (socket) => {
   });
   socket.on('send-chat-message', (message) => {
     const addComment = async () => {
-      console.log(users[socket.id]);
       const comment = await Comment.create({
         commentText: message,
         commentAuthor: users[socket.id],
