@@ -13,9 +13,9 @@ import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import { useNavigate } from 'react-router-dom';
 
 // this is the size of our pixels in real pixels
-const pixelSize = 25; 
+const pixelSize = 20; 
 // This is the size of the canvas in our pixels (not real pixels)
-const canvasSize = 10;
+const canvasSize = 50;
 
 const Canvas = () =>{
     //This state is just the coordinates of the pixel that was clicked on
@@ -130,9 +130,7 @@ const Canvas = () =>{
         }
     }
 
-    const handleClose = (evt) =>{
-        setPixelTarget(null);
-    }
+    
     // sets up styling for MUI tooltip
     // not currently in use. I couldn't get it working so I just made my own tooltip
     const PixelTooltip = styled(({ className, ...props }) => (
@@ -169,8 +167,7 @@ const Canvas = () =>{
             <Box className="tooltip">{tooltipData != null ? `Placed by: ${tooltipData.placementUser} on ${tooltipData.updatedAt}` :null}</Box>
             <Backdrop
   sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-  open={pixelTarget}
-  onClick={handleClose}
+  open={pixelTarget ?? false}
 >
 
             <ColorForm pixelTarget={pixelTarget} canvas={canvasRef} setPixelTarget={setPixelTarget} pixelSize={pixelSize} pixelArray2D={pixelArray2D} setPixelArray2D={setPixelArray2D}/>
