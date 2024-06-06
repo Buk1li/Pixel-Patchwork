@@ -10,7 +10,8 @@ import { Outlet } from 'react-router-dom';
 
 import Header from './components/Header';
 import Footer from './components/Footer';
-import Chat from './components/Chat';
+
+import {useEffect} from 'react';
 
 const httpLink = createHttpLink({
   uri: '/graphql',
@@ -32,6 +33,10 @@ const client = new ApolloClient({
 });
 
 function App() {
+  useEffect(() =>{
+
+  },[])
+
   return (
     <ApolloProvider client={client}>
       <div className="flex-column justify-flex-start min-100-vh">
@@ -39,7 +44,6 @@ function App() {
         <div className="container">
           <Outlet />
         </div>
-        <Chat />
       </div>
     </ApolloProvider>
   );
