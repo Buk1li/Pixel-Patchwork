@@ -1,4 +1,4 @@
-import './App.css';
+
 import {
   ApolloClient,
   InMemoryCache,
@@ -7,6 +7,8 @@ import {
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { Outlet } from 'react-router-dom';
+import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -15,6 +17,17 @@ import {useEffect} from 'react';
 
 const httpLink = createHttpLink({
   uri: '/graphql',
+});
+
+const font =  "'Pixelify Sans', sans-serif";
+
+const theme = createMuiTheme({
+  typography: {
+    fontFamily: [
+      'Pixelify Sans',
+      'normal'
+    ].join(',')
+  }
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -32,6 +45,13 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+//MUI dark mode base line 
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
+
 function App() {
   useEffect(() =>{
 
@@ -39,12 +59,16 @@ function App() {
 
   return (
     <ApolloProvider client={client}>
-      <div className="flex-column justify-flex-start min-100-vh">
+      <ThemeProvider theme={darkTheme}>
+
+      <CssBaseline/>
+      <div className="">
         <Header />
-        <div className="container">
+        <div className="">
           <Outlet />
         </div>
       </div>
+      </ThemeProvider>
     </ApolloProvider>
   );
 }
