@@ -17,27 +17,11 @@ import { LOGIN_USER } from '../utils/mutations';
 
 import Auth from '../utils/auth';
 
-// export default function LoginPage() {
-    
-//   return (
-//     < >
-//       <CssBaseline />
-//       <Container component="main" maxWidth="xs">
-//         <Box sx={{ bgcolor: '#cfe8fc', height: '100vh' }} />
-//         <Box
-//           sx={{
-//             marginTop: 8,
-//             display: 'flex',
-//             flexDirection: 'column',
-//             alignItems: 'center',
-//           }}
-//         />
-//       </Container>
-//     </ >
-//   );
-// }
-
-const defaultTheme = createTheme();
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
 
 export default function SignIn() {
   const [login, {error, data}] = useMutation(LOGIN_USER);
@@ -63,7 +47,7 @@ export default function SignIn() {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={darkTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
