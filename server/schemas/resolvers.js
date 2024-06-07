@@ -1,5 +1,6 @@
 const { User, Comment, Pixel } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');
+const { GraphQLError } = require('graphql');
 
 const resolvers = {
   Query: {
@@ -29,9 +30,15 @@ const resolvers = {
 
   Mutation: {
     addUser: async (parent, { username, email, password }) => {
-      const user = await User.create({ username, email, password });
-      const token = signToken(user);
-      return { token, user };
+      try{
+        const user = await User.create({ username, email, password });
+        const token = signToken(user);
+        return { token, user };
+      }
+      catch(e){
+        console.error(e);
+        throw new GraphQLError("Username or email already in use");
+      }
     },
     login: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
