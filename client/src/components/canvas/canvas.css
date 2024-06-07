@@ -1,14 +1,14 @@
-#pixel-grid{
+#pixel-grid {
     display: grid;
     grid-template-columns: repeat(100, 5px);
 }
 
-.canvas-wrapper{
+.canvas-wrapper {
     display: flex;
     justify-content: center;
 }
 
-.tooltip{
+.tooltip {
     color: white;
     background-color: grey;
     max-width: 220px;
