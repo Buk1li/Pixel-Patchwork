@@ -30,8 +30,7 @@ const Canvas = () => {
         borderRadius: '10%',
         boxShadow: '1em 0.5em 1em black'
     }
-
-
+    
     //This state is just the coordinates of the pixel that was clicked on
     const [pixelTarget, setPixelTarget] = useState(null);
 
