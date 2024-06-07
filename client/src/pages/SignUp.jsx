@@ -20,6 +20,12 @@ const darkTheme = createTheme({
   palette: {
     mode: 'dark',
   },
+  typography: {
+    fontFamily: [
+      'Pixelify Sans',
+      'normal'
+    ].join(',')
+  }
 });
 
 export default function SignUp() {
@@ -57,7 +63,7 @@ export default function SignUp() {
             alignItems: 'center',
           }}
         >
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h5" style={{ fontSize: "30px" }}>
             Sign up
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
@@ -96,7 +102,7 @@ export default function SignUp() {
               </Grid>
 
             </Grid>
-            <Button
+            <Button style={{ fontSize: "15px" }}
               type="submit"
               fullWidth
               variant="contained"
