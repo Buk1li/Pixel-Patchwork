@@ -1,6 +1,6 @@
 const express = require('express');
 const http = require('http');
-const {Server} = require('socket.io');
+const { Server } = require('socket.io');
 const path = require('path');
 const { ApolloServer } = require('@apollo/server');
 const { expressMiddleware } = require('@apollo/server/express4');
