@@ -20,6 +20,12 @@ const darkTheme = createTheme({
   palette: {
     mode: 'dark',
   },
+  typography: {
+    fontFamily: [
+      'Pixelify Sans',
+      'normal'
+    ].join(',')
+  }
 });
 
 export default function SignUp() {
@@ -29,18 +35,36 @@ export default function SignUp() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const inputData = new FormData(event.currentTarget);
+    const username = inputData.get('username');
+    if(!username){
+      alert("Username is required");
+      return;
+    }
+
+    const email = inputData.get('email');
+    if(!email){
+      alert("Email is required");
+      return;
+    }
+
+    const password = inputData.get("password");
+    if(!password){
+      alert("Password is required");
+      return;
+    }
+
     try{
       const {data} = await addUser({
         variables: {
-          username: inputData.get('username'),
-          email: inputData.get('email'),
-          password: inputData.get('password')
+          username: username,
+          email: email,
+          password: password
         }
       })
 
       Auth.login(data.addUser.token);
     }
-    catch{
+    catch(e){
       console.error(e);
     }
   };
@@ -57,7 +81,7 @@ export default function SignUp() {
             alignItems: 'center',
           }}
         >
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h5" style={{ fontSize: "30px" }}>
             Sign up
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
@@ -96,7 +120,7 @@ export default function SignUp() {
               </Grid>
 
             </Grid>
-            <Button
+            <Button style={{ fontSize: "15px" }}
               type="submit"
               fullWidth
               variant="contained"
@@ -104,6 +128,7 @@ export default function SignUp() {
             >
               Sign Up
             </Button>
+            {error ? <div style={{textAlign:"left", fontSize:"25px"}}>{error.message}</div>:null}
             <Grid container justifyContent="flex-end">
             </Grid>
           </Box>

@@ -21,6 +21,12 @@ const darkTheme = createTheme({
   palette: {
     mode: 'dark',
   },
+  typography: {
+    fontFamily: [
+      'Pixelify Sans',
+      'normal'
+    ].join(',')
+  }
 });
 
 export default function SignIn() {
@@ -58,7 +64,7 @@ export default function SignIn() {
             alignItems: 'center',
           }}
         >
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h5" style={{ fontSize: "30px" }}>
             Sign in
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
@@ -83,7 +89,7 @@ export default function SignIn() {
               autoComplete="current-password"
             />
       
-            <Button
+            <Button style={{ fontSize: "15px" }}
               type="submit"
               fullWidth
               variant="contained"
@@ -91,6 +97,7 @@ export default function SignIn() {
             >
               Sign In
             </Button>
+            {error ? <div style={{textAlign:"center", fontSize: '25px'}}>{error.message}</div>:null}
             <Grid container>
             </Grid>
           </Box>

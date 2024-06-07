@@ -1,6 +1,6 @@
 import { height, width } from "@mui/system";
 import React, { useRef, useEffect, useState } from 'react';
-import { Box, Checkbox, FormControlLabel, InputLabel, Container, Button, CircularProgress, Backdrop } from '@mui/material';
+import { Box, Grid, Checkbox, FormControlLabel, InputLabel, Container, Button, CircularProgress, Backdrop } from '@mui/material';
 import ColorForm from './colorForm';
 import { useQuery } from '@apollo/client';
 import { PIXELS } from '../../utils/queries';
@@ -11,6 +11,7 @@ import './canvas.css';
 import { styled } from '@mui/material/styles';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import { useNavigate } from 'react-router-dom';
+import { alignProperty } from "@mui/material/styles/cssUtils";
 
 // this is the size of our pixels in real pixels
 const pixelSize = 20;
@@ -18,6 +19,18 @@ const pixelSize = 20;
 const canvasSize = 50;
 
 const Canvas = () => {
+
+    const tipStyle = {
+        color: '#fff',
+        backgroundColor: 'grey',
+        height: '3.5em',
+        margin: '0.5em',
+        textAlign: 'center',
+        alignContent: 'center',
+        borderRadius: '10%',
+        boxShadow: '1em 0.5em 1em black'
+    }
+    
     //This state is just the coordinates of the pixel that was clicked on
     const [pixelTarget, setPixelTarget] = useState(null);
 
@@ -159,31 +172,34 @@ const Canvas = () => {
     }
 
     return (
-        <Container sx={{
-            display: 'flex',
-            justifyContent: 'center',
-        }}>
-            <canvas
-                style={{
-                    border: '0.5em ridge #2d3e50'
-                }}
-                width={canvasSize * pixelSize}
-                height={canvasSize * pixelSize}
-                ref={canvasRef}
-                onClick={handleClick}
-                onMouseMove={evt => handleMouseOver(evt)}
-                onMouseLeave={() => setTooltipData(null)}
-                className={`kanvas`}
-            ></canvas>
-            <Box className="tooltip">{tooltipData != null ? `Placed by: ${tooltipData.placementUser} on ${tooltipData.updatedAt}` : null}</Box>
-            <Backdrop
-                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                open={pixelTarget ?? false}
-            >
+        <>
+            <Container sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                flexDirection: 'column'
+            }}>
+                <Box sx={tipStyle}>{tooltipData != null ? `Placed by: ${tooltipData.placementUser} on ${tooltipData.updatedAt}` : ' '}</Box>
+                <canvas
+                    style={{
+                        border: '0.5em ridge #2d3e50'
+                    }}
+                    width={canvasSize * pixelSize}
+                    height={canvasSize * pixelSize}
+                    ref={canvasRef}
+                    onClick={handleClick}
+                    onMouseMove={evt => handleMouseOver(evt)}
+                    onMouseLeave={() => setTooltipData(null)}
+                    className={`kanvas`}
+                ></canvas>
+                <Backdrop
+                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                    open={pixelTarget != null}
+                >
 
-                <ColorForm pixelTarget={pixelTarget} canvas={canvasRef} setPixelTarget={setPixelTarget} pixelSize={pixelSize} pixelArray2D={pixelArray2D} setPixelArray2D={setPixelArray2D} />
-            </Backdrop>
-        </Container>
+                    <ColorForm pixelTarget={pixelTarget} canvas={canvasRef} setPixelTarget={setPixelTarget} pixelSize={pixelSize} pixelArray2D={pixelArray2D} setPixelArray2D={setPixelArray2D} />
+                </Backdrop>
+            </Container>
+        </>
     )
 }
 
