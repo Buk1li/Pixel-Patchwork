@@ -1,6 +1,6 @@
 import { height, width } from "@mui/system";
 import React, { useRef, useEffect, useState } from 'react';
-import { Box, Checkbox, FormControlLabel, InputLabel, Container, Button } from '@mui/material';
+import { Box, Checkbox, FormControlLabel, InputLabel, Container, Button, CircularProgress, Backdrop } from '@mui/material';
 import ColorForm from './colorForm';
 import { useQuery } from '@apollo/client';
 import { PIXELS } from '../../utils/queries';
@@ -13,9 +13,9 @@ import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import { useNavigate } from 'react-router-dom';
 
 // this is the size of our pixels in real pixels
-const pixelSize = 25; 
+const pixelSize = 20; 
 // This is the size of the canvas in our pixels (not real pixels)
-const canvasSize = 10;
+const canvasSize = 50;
 
 const Canvas = () =>{
     //This state is just the coordinates of the pixel that was clicked on
@@ -130,6 +130,7 @@ const Canvas = () =>{
         }
     }
 
+    
     // sets up styling for MUI tooltip
     // not currently in use. I couldn't get it working so I just made my own tooltip
     const PixelTooltip = styled(({ className, ...props }) => (
@@ -146,7 +147,15 @@ const Canvas = () =>{
 
     // all return statements must come after all hooks
     if (loading) {
-        return <div>Loading...</div>;
+        return (
+
+            <Container sx={{
+                display: 'flex',
+                justifyContent: 'center',
+            }}>
+            <CircularProgress color="inherit" />;
+        </Container>
+        )
     }
 
     return (
@@ -155,6 +164,9 @@ const Canvas = () =>{
                 justifyContent: 'center',
             }}>
             <canvas
+                style={{
+                    border: '0.5em ridge #2d3e50'
+                }}
                 width={canvasSize * pixelSize}
                 height={canvasSize * pixelSize}
                 ref={canvasRef}
@@ -164,7 +176,13 @@ const Canvas = () =>{
                 className={`kanvas`}
             ></canvas>
             <Box className="tooltip">{tooltipData != null ? `Placed by: ${tooltipData.placementUser} on ${tooltipData.updatedAt}` :null}</Box>
+            <Backdrop
+  sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+  open={pixelTarget ?? false}
+>
+
             <ColorForm pixelTarget={pixelTarget} canvas={canvasRef} setPixelTarget={setPixelTarget} pixelSize={pixelSize} pixelArray2D={pixelArray2D} setPixelArray2D={setPixelArray2D}/>
+</Backdrop>
         </Container>
     )
 }

@@ -6,12 +6,17 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 const Header = () => {
   const linkStyle = {
     textDecoration: 'none',
     color: '#fff',
   }
+
+  const paperStyle = {
+    padding: '0.5em',
+  }
+
 
   const logout = (event) => {
     event.preventDefault();
@@ -42,9 +47,11 @@ const Header = () => {
         </Grid>
         <Grid item xs={4}>
           {Auth.loggedIn() ? (
-              <Button style={linkStyle} className="" onClick={logout}>
+            <Button style={linkStyle} onClick={logout}>
+              <Paper sx={paperStyle} square={false}>
                 Logout
-              </Button>
+              </Paper>
+            </Button>
           ) : (
             <>
               <Grid container
@@ -54,14 +61,14 @@ const Header = () => {
                 spacing={1}>
                 <Grid item xs={4}>
                   <Link style={linkStyle} to="/login">
-                    <Paper>
+                    <Paper sx={paperStyle} square={false}>
                       Login
                     </Paper>
                   </Link>
                 </Grid>
                 <Grid item xs={4}>
                   <Link style={linkStyle} to="/signup">
-                    <Paper>
+                    <Paper sx={paperStyle} square={false}>
                       Signup
                     </Paper>
                   </Link>

@@ -19,17 +19,6 @@ const httpLink = createHttpLink({
   uri: '/graphql',
 });
 
-const font =  "'Pixelify Sans', sans-serif";
-
-const theme = createTheme({
-  typography: {
-    fontFamily: [
-      'Pixelify Sans',
-      'normal'
-    ].join(',')
-  }
-});
-
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('id_token');
   return {
@@ -50,6 +39,12 @@ const darkTheme = createTheme({
   palette: {
     mode: 'dark',
   },
+  typography: {
+    fontFamily: [
+      'Pixelify Sans',
+      'normal'
+    ].join(',')
+  }
 });
 
 function App() {
