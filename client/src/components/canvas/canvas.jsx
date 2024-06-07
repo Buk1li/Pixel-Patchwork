@@ -194,7 +194,7 @@ const Canvas = () => {
                 ></canvas>
                 <Backdrop
                     sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                    open={pixelTarget ?? false}
+                    open={pixelTarget != null}
                 >
 
                     <ColorForm pixelTarget={pixelTarget} canvas={canvasRef} setPixelTarget={setPixelTarget} pixelSize={pixelSize} pixelArray2D={pixelArray2D} setPixelArray2D={setPixelArray2D} />
