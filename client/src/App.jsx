@@ -38,6 +38,7 @@ const client = new ApolloClient({
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
+    
   },
   typography: {
     fontFamily: [
