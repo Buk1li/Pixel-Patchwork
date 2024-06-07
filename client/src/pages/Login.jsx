@@ -97,7 +97,7 @@ export default function SignIn() {
             >
               Sign In
             </Button>
-            {error ? <div style={{textAlign:"center"}}>{error.message}</div>:null}
+            {error ? <div style={{textAlign:"center", fontSize: '25px'}}>{error.message}</div>:null}
             <Grid container>
             </Grid>
           </Box>
