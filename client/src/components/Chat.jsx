@@ -75,12 +75,9 @@ const Chat = ({socket}) => {
         if (scrollRef.current) {
           scrollRef.current.scrollIntoView({ behavior: "smooth" });
         }
-    }, [chat]);
+    }, [chat, showChat]);
 
     const toggleChat = () =>{
-        scrollRef.current.scrollIntoView({
-            behavior: "smooth"
-        })
         setShowChat(!showChat);
     }
 
@@ -88,7 +85,7 @@ const Chat = ({socket}) => {
         <div style={{ position: 'fixed', bottom: 0, left: 0, width: '300px', border: '1px solid #ccc', background: '#2d3e50' }}>
             <Button sx={{width: "100%", padding: 0, backgroundColor: "#2d3e50", color: "white"}} onClick={toggleChat}>{showChat ? "Close Chat": "Open Chat"}</Button>
             <List sx={chatStyle}>
-                <Collapse in={showChat}>
+                <Collapse in={showChat} timeout={0} onEntered={() => scrollRef.current.scrollIntoView({behavior: "instant"})}>
                     {chat.map((msg, index) => (
                         <div key={index}>
                             <ListItemText sx={{margin: "0.5rem"}}>{msg}</ListItemText>

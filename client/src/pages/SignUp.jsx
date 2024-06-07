@@ -35,18 +35,36 @@ export default function SignUp() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const inputData = new FormData(event.currentTarget);
+    const username = inputData.get('username');
+    if(!username){
+      alert("Username is required");
+      return;
+    }
+
+    const email = inputData.get('email');
+    if(!email){
+      alert("Email is required");
+      return;
+    }
+
+    const password = inputData.get("password");
+    if(!password){
+      alert("Password is required");
+      return;
+    }
+
     try{
       const {data} = await addUser({
         variables: {
-          username: inputData.get('username'),
-          email: inputData.get('email'),
-          password: inputData.get('password')
+          username: username,
+          email: email,
+          password: password
         }
       })
 
       Auth.login(data.addUser.token);
     }
-    catch{
+    catch(e){
       console.error(e);
     }
   };
@@ -110,6 +128,7 @@ export default function SignUp() {
             >
               Sign Up
             </Button>
+            {error ? <div style={{textAlign:"center"}}>{error.message}</div>:null}
             <Grid container justifyContent="flex-end">
             </Grid>
           </Box>
