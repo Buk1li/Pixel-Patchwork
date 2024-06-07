@@ -6,6 +6,8 @@ import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import { Link } from "react-router-dom";
+import './header.css';
+
 const Header = () => {
   const linkStyle = {
     textDecoration: "none",
@@ -39,7 +41,7 @@ const Header = () => {
         <Grid item xs={4}></Grid>
         <Grid item xs={4}>
           <Link style={linkStyle} to="/">
-            <h1 style={{ fontSize: "60px" }}>r/placeholder</h1>
+            <h1 className="title">Pixel Patchwork</h1>
           </Link>
         </Grid>
 
@@ -61,14 +63,14 @@ const Header = () => {
               >
                 <Grid item xs={4}>
                   <Link style={linkStyle} to="/login">
-                    <Paper sx={paperStyle} style={{ fontSize: "20px" }} square={false}>
+                    <Paper sx={paperStyle}  square={false} className="header-button">
                       Login
                     </Paper>
                   </Link>
                 </Grid>
                 <Grid item xs={4}>
                   <Link style={linkStyle} to="/signup">
-                    <Paper sx={paperStyle} square={false} style={{ fontSize: "20px" }}>
+                    <Paper sx={paperStyle} square={false} className="header-button">
                       Signup
                     </Paper>
                   </Link>
