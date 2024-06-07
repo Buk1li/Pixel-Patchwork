@@ -122,6 +122,7 @@ export default function SignUp() {
             >
               Sign Up
             </Button>
+            {error ? <div style={{textAlign:"center"}}>{error.message}</div>:null}
             <Grid container justifyContent="flex-end">
             </Grid>
           </Box>

@@ -37,7 +37,7 @@ const resolvers = {
       }
       catch(e){
         console.error(e);
-        throw new GraphQLError("Username or email already in use");
+        throw new GraphQLError("Username or email already in use or invalid");
       }
     },
     login: async (parent, { email, password }) => {
