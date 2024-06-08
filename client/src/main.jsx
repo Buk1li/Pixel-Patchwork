@@ -9,6 +9,7 @@ import Login from './pages/Login'
 import SignUp from './pages/SignUp'
 import ErrorPage from './pages/Error.jsx';
 import Premium from './pages/premium.jsx';
+import PaymentSuccessful from './pages/paymentSuccessful.jsx';
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: '/premium',
         element: <Premium/>
+      },
+      {
+        path:'/paymentSuccessful',
+        element: <PaymentSuccessful/>
       }
     ]
   },

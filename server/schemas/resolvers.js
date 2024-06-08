@@ -47,10 +47,11 @@ const resolvers = {
               quantity: 1
             }],
             mode: 'payment',
-            success_url: `${url}/`,
+            success_url: `${url}/paymentSuccessful`,
             cancel_url:`${url}/premium`
           })
 
+          
           return {session: session.id};
         }
         catch(e){
