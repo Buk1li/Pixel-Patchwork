@@ -69,3 +69,11 @@ export const PIXELS = gql`
     }
   }
 `
+
+export const CHECKOUT = gql`
+  query Checkout($userId: ID!) {
+    checkout(userId: $userId) {
+      session
+    }
+  }
+`

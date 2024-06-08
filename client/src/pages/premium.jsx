@@ -6,6 +6,13 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { loadStripe } from '@stripe/stripe-js';
+import { useLazyQuery } from '@apollo/client';
+import { CHECKOUT } from '../utils/queries';
+import Auth from '../utils/auth';
+import {useEffect} from 'react';
+
+const stripePromise = loadStripe('pk_test_51PP4QmP7EXLQgQgOZCQ4PfoDAIWGGX7KsriZC2hwhj2Gi0NoZFxHTs8iVEwsj4UGXLtGkfQJNkkUjBC97uNhHCcU00xn3bcIKD');
 
 const darkTheme = createTheme({
     palette: {
@@ -20,6 +27,21 @@ const darkTheme = createTheme({
   });
 
 export default function Premium(){
+    const [getCheckout, {data}] = useLazyQuery(CHECKOUT);
+
+    useEffect(() => {
+        if(data){
+            console.log(data);
+            stripePromise.then((res) => {
+                res.redirectToCheckout({sessionId: data.checkout.session});
+            })
+        }
+    },[data])
+
+    const upgrade = () => {
+        getCheckout({variables:{userId: Auth.getProfile().data._id}});
+    }
+
     return (
         <ThemeProvider theme={darkTheme}>
             <Container component="main" maxWidth="sm">
@@ -41,7 +63,7 @@ export default function Premium(){
                 </Typography>
 
                 <Typography component="h1" variant="h5" style={{ fontSize: "25px" }}>
-                    One time fee of $0.40
+                    One time fee of $0.60
                 </Typography>
                 
                 <Typography component="h1" variant="h5" style={{ fontSize: "30px", marginTop:"1.5rem" }}>
@@ -53,7 +75,7 @@ export default function Premium(){
                 </Typography>
             
                 <Button style={{ fontSize: "25px", marginTop:"2rem" }}
-                    type="submit"
+                    onClick={upgrade}
                     variant="contained"
                     sx={{ mt: 3, mb: 2 }}
                 >
