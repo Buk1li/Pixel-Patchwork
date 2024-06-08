@@ -48,6 +48,7 @@ const typeDefs = `
     removeComment(commentId: ID!): Comment
     addPixel(pixelId: ID!, pixelColor: String!, placementUser: String!, coordinates: [Int]!): Pixel
     updatePixel(coordinates: [Int]!, pixelColor: String!, placementUser: String!): Auth
+    addPremium: Auth
   }
 `;
 

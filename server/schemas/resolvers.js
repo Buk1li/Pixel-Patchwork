@@ -153,6 +153,20 @@ const resolvers = {
       }
       throw AuthenticationError;
     },
+    addPremium: async (_, args, context) => {
+      if(context.user){
+        const user = await User.findByIdAndUpdate(
+          {_id: context.user._id},
+          {$set:{isPremium: true}},
+          {new: true}
+        )
+
+        const token = signToken(user);
+
+        return {token, user};
+      }
+      throw AuthenticationError
+    }
   },
 };
 

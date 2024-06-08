@@ -67,3 +67,14 @@ mutation Mutation($coordinates: [Int]!, $pixelColor: String!, $placementUser: St
   }
 }
 `
+export const ADD_PREMIUM = gql`
+mutation Mutation {
+  addPremium {
+    token
+    user {
+      _id
+      username
+    }
+  }
+}
+`

@@ -7,8 +7,8 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { loadStripe } from '@stripe/stripe-js';
-import { useLazyQuery } from '@apollo/client';
-import { CHECKOUT } from '../utils/queries';
+import { useMutation } from '@apollo/client';
+import { ADD_PREMIUM } from '../utils/mutations';
 import Auth from '../utils/auth';
 import {useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -27,8 +27,16 @@ const darkTheme = createTheme({
   });
 
 export default function PaymentSuccessful(){
-
+    const [addPremium, {error, data}] = useMutation(ADD_PREMIUM);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const makePremiumCall = async () => {
+            const {data} = await addPremium();
+            Auth.updateToken(data.addPremium.token);
+        }
+        makePremiumCall();
+    },[])
 
     return (
         <ThemeProvider theme={darkTheme}>

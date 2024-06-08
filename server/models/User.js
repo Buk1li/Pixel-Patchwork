@@ -24,6 +24,10 @@ const userSchema = new Schema({
   lastUpdate: {
     type: Number,
     default: 0,
+  },
+  isPremium:{
+    type: Boolean,
+    default: false
   }
 });
 
