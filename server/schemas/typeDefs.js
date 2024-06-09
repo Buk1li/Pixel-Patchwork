@@ -27,6 +27,10 @@ const typeDefs = `
     user: User
   }
 
+  type Checkout {
+    session: ID
+  }
+
   type Query {
     users: [User]
     user(username: String!): User
@@ -34,6 +38,7 @@ const typeDefs = `
     comment(commentId: ID!): Comment
     me: User
     pixels: [Pixel]
+    checkout(userId: ID!): Checkout
   }
 
   type Mutation {
@@ -43,6 +48,7 @@ const typeDefs = `
     removeComment(commentId: ID!): Comment
     addPixel(pixelId: ID!, pixelColor: String!, placementUser: String!, coordinates: [Int]!): Pixel
     updatePixel(coordinates: [Int]!, pixelColor: String!, placementUser: String!): Auth
+    addPremium: Auth
   }
 `;
 

@@ -47,11 +47,30 @@ const Header = () => {
 
         <Grid item xs={4}>
           {Auth.loggedIn() ? (
-            <Button style={linkStyle} onClick={logout}>
-              <Paper sx={paperStyle} square={false}>
-                Logout
-              </Paper>
-            </Button>
+              <>
+              <Grid
+              container
+              direction="row"
+              justifyContent="space-around"
+              alignItems="center"
+              spacing={0}
+            >
+              <Grid item xs={4}>
+                <Link style={linkStyle} onClick={logout}>
+                  <Paper sx={paperStyle} square={false} className="header-button">
+                    Logout
+                  </Paper>
+                </Link>
+              </Grid>
+              <Grid item xs={4}>
+                <Link style={linkStyle} to="/premium">
+                  <Paper sx={paperStyle} square={false} className="header-button">
+                    Premium
+                  </Paper>
+                </Link>
+              </Grid>
+            </Grid>
+              </>
           ) : (
             <>
               <Grid

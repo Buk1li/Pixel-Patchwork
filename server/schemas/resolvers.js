@@ -1,6 +1,9 @@
 const { User, Comment, Pixel } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');
 const { GraphQLError } = require('graphql');
+require('dotenv').config();
+const stripe = require('stripe')(process.env.STRIPE_KEY);
+
 
 const resolvers = {
   Query: {
@@ -26,6 +29,37 @@ const resolvers = {
     pixels: async () => {
       return Pixel.find();
     },
+    checkout: async (_, args, context) => {
+      if(context.user){
+        const url = new URL(context.headers.referer).origin;
+        try{
+          const session = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
+            line_items:[{
+              price_data: {
+                currency: 'usd',
+                product_data: {
+                  name: "Pixel Patchwork Premium Membership",
+                  description: "Gain access to faster pixel placement",
+                },
+                unit_amount: 60
+              },
+              quantity: 1
+            }],
+            mode: 'payment',
+            success_url: `${url}/paymentSuccessful`,
+            cancel_url:`${url}/premium`
+          })
+
+          
+          return {session: session.id};
+        }
+        catch(e){
+          console.error(e);
+        }
+      }
+      throw AuthenticationError
+    }
   },
 
   Mutation: {
@@ -119,6 +153,20 @@ const resolvers = {
       }
       throw AuthenticationError;
     },
+    addPremium: async (_, args, context) => {
+      if(context.user){
+        const user = await User.findByIdAndUpdate(
+          {_id: context.user._id},
+          {$set:{isPremium: true}},
+          {new: true}
+        )
+
+        const token = signToken(user);
+
+        return {token, user};
+      }
+      throw AuthenticationError
+    }
   },
 };
 

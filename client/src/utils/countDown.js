@@ -1,6 +1,7 @@
 import Auth from './auth';
 
-const timeLimit = 3000;
+const timeLimit = 30000;
+const premiumLimit = 3000;
 
 // returns the time in seconds until another pixel can be placed.
 // can return negative numbers
@@ -10,7 +11,8 @@ function countDown(){
         return null;
     }
 
-    const pixelTime = Auth.getProfile().data.lastUpdate + timeLimit;
+    const profile = Auth.getProfile().data;
+    const pixelTime = profile.lastUpdate + (profile.isPremium ? premiumLimit: timeLimit);
     let waitTime = pixelTime - Date.now();
     return Math.round(waitTime / 1000);
 }

@@ -48,9 +48,6 @@ const darkTheme = createTheme({
 });
 
 function App() {
-  useEffect(() =>{
-
-  },[])
 
   return (
     <ApolloProvider client={client}>
