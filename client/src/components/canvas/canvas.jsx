@@ -1,5 +1,6 @@
+import { height, width } from "@mui/system";
 import React, { useRef, useEffect, useState } from 'react';
-import { Box, Checkbox, FormControlLabel, Container, CircularProgress, Backdrop } from '@mui/material';
+import { Box, Grid, Checkbox, FormControlLabel, InputLabel, Container, Button, CircularProgress, Backdrop } from '@mui/material';
 import ColorForm from './colorForm';
 import { useQuery } from '@apollo/client';
 import { PIXELS } from '../../utils/queries';
@@ -10,6 +11,7 @@ import './canvas.css';
 import { styled } from '@mui/material/styles';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import { useNavigate } from 'react-router-dom';
+import { alignProperty } from "@mui/material/styles/cssUtils";
 
 // this is the size of our pixels in real pixels
 const pixelSize = 20;
@@ -17,15 +19,17 @@ const pixelSize = 20;
 const canvasSize = 50;
 
 const Canvas = () => {
+
     const tipStyle = {
         color: '#fff',
-        backgroundColor: 'grey',
+        backgroundColor: '#7C96B0',
         height: '3.5em',
         margin: '0.5em',
         textAlign: 'center',
+        fontSize: '20px',
         alignContent: 'center',
-        borderRadius: '10%',
-        boxShadow: '1em 0.5em 1em black'
+        borderRadius: '15px',
+        boxShadow: '1em 0.5em 1em black',
     }
 
     // This state is just the coordinates of the pixel that was clicked on
@@ -33,10 +37,6 @@ const Canvas = () => {
 
     // This state is the info that should be displayed in the tooltip
     const [tooltipData, setTooltipData] = useState(null);
-
-    // This state is for toggling the grid
-    const [showGrid, setShowGrid] = useState(false);
-
     const canvasRef = useRef(null);
     const { loading, error, data } = useQuery(PIXELS);
 
@@ -63,54 +63,28 @@ const Canvas = () => {
         if (canvasRef.current) {
             drawArray();
         }
-    }, [data, showGrid]); // Re-draw canvas when showGrid state changes
+    }, [data])
 
-    // function to construct the canvas once we get the array.
+    //function to contruct the canvas once we get the array.
     const drawArray = () => {
         let canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
         let arr = { ...pixelArray2D };
-
-        // Clear the canvas before redrawing
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Draw pixels
         for (let i = 0; i < pixelArray.length; i++) {
             let { coordinates, pixelColor } = pixelArray[i];
-            ctx.fillStyle = `${pixelColor}`;
+            ctx.fillStyle = `${pixelColor}`
             ctx.fillRect(coordinates[0] * pixelSize, coordinates[1] * pixelSize, pixelSize, pixelSize);
 
             // This populates the pixelArray2D state with the placementUser and updatedAt for each pixel
             arr[coordinates[0]][coordinates[1]] = {
                 placementUser: pixelArray[i].placementUser,
                 updatedAt: pixelArray[i].updatedAt
-            };
+            }
         }
-
         setPixelArray2D(arr);
+    }
 
-        // Draw grid lines if showGrid is true
-        if (showGrid) {
-            ctx.strokeStyle = "#cccccc"; // Color of the grid lines
-            ctx.lineWidth = 0.5; // Width of the grid lines
-
-            for (let x = 0; x <= canvas.width; x += pixelSize) {
-                ctx.beginPath();
-                ctx.moveTo(x, 0);
-                ctx.lineTo(x, canvas.height);
-                ctx.stroke();
-            }
-
-            for (let y = 0; y <= canvas.height; y += pixelSize) {
-                ctx.beginPath();
-                ctx.moveTo(0, y);
-                ctx.lineTo(canvas.width, y);
-                ctx.stroke();
-            }
-        }
-    };
-
-    // gets the mouse's position relative to size (could prove problematic)
+    //gets the mouses position relative to size (could prove problematic)
     function getMousePos(evt) {
         let canvas = evt.target;
         let rect = canvas.getBoundingClientRect(), // abs. size of element
@@ -120,19 +94,18 @@ const Canvas = () => {
         return {
             x: (evt.clientX - rect.left) * scaleX,   // scale mouse coordinates after they have
             y: (evt.clientY - rect.top) * scaleY     // been adjusted to be relative to element
-        };
-    }
+        }
 
-    // used on each coordinate to make a coordinate that works with the grid and DB
+    }
+    //used on each coordiante to make a coordinate that works with the grid and DB
     function findBestSquare(val) {
-        // first we get the remainder
-        let remainder = val % pixelSize;
-        // then subtract and divide by ten
+        //first we get the remainder
+        let remainder = val % pixelSize
+        //then subtract and divide by ten
         let rounded = (val - remainder) / pixelSize;
         return rounded;
     }
-
-    // handles click events
+    //handles click events
     function handleClick(evt) {
         if (!Auth.loggedIn()) {
             navigate('/login');
@@ -161,14 +134,16 @@ const Canvas = () => {
         let x = findBestSquare(coords.x);
         let y = findBestSquare(coords.y);
 
-        // get tooltip info from pixelArray2D and put it in the tooltipData state
+        // get tootip info from pixelArray2D and put it in the tooltipData state
         const data = pixelArray2D[x][y];
         if (data.placementUser != null) {
             setTooltipData(pixelArray2D[x][y]);
-        } else {
+        }
+        else {
             setTooltipData(null);
         }
     }
+
 
     // sets up styling for MUI tooltip
     // not currently in use. I couldn't get it working so I just made my own tooltip
@@ -187,6 +162,7 @@ const Canvas = () => {
     // all return statements must come after all hooks
     if (loading) {
         return (
+
             <Container sx={{
                 display: 'flex',
                 justifyContent: 'center',
@@ -203,10 +179,6 @@ const Canvas = () => {
                 justifyContent: 'center',
                 flexDirection: 'column'
             }}>
-                <FormControlLabel
-                    control={<Checkbox checked={showGrid} onChange={() => setShowGrid(!showGrid)} />}
-                    label="Show Grid"
-                />
                 <Box sx={tipStyle}>{tooltipData != null ? `Placed by: ${tooltipData.placementUser} on ${tooltipData.updatedAt}` : ' '}</Box>
                 <canvas
                     style={{
@@ -224,11 +196,13 @@ const Canvas = () => {
                     sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                     open={pixelTarget != null}
                 >
+
                     <ColorForm pixelTarget={pixelTarget} canvas={canvasRef} setPixelTarget={setPixelTarget} pixelSize={pixelSize} pixelArray2D={pixelArray2D} setPixelArray2D={setPixelArray2D} />
                 </Backdrop>
             </Container>
         </>
     )
 }
+
 
 export default Canvas;
