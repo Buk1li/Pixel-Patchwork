@@ -41,36 +41,36 @@ const Header = () => {
         <Grid item xs={4}></Grid>
         <Grid item xs={4}>
           <Link style={linkStyle} to="/">
-            <h1 className="title">Pixel Patchwork</h1>
+            <img src="/Pixel_Patchwork.png" alt="Pixel Patchwork Logo" className="logo" />
           </Link>
         </Grid>
 
         <Grid item xs={4}>
           {Auth.loggedIn() ? (
-              <>
+            <>
               <Grid
-              container
-              direction="row"
-              justifyContent="space-around"
-              alignItems="center"
-              spacing={0}
-            >
-              <Grid item xs={4}>
-                <Link style={linkStyle} onClick={logout}>
-                  <Paper sx={paperStyle} square={false} className="header-button">
-                    Logout
-                  </Paper>
-                </Link>
+                container
+                direction="row"
+                justifyContent="space-around"
+                alignItems="center"
+                spacing={0}
+              >
+                <Grid item xs={4}>
+                  <Link style={linkStyle} onClick={logout}>
+                    <Paper sx={paperStyle} square={false} className="header-button">
+                      Logout
+                    </Paper>
+                  </Link>
+                </Grid>
+                <Grid item xs={4}>
+                  <Link style={linkStyle} to="/premium">
+                    <Paper sx={paperStyle} square={false} className="header-button">
+                      Premium
+                    </Paper>
+                  </Link>
+                </Grid>
               </Grid>
-              <Grid item xs={4}>
-                <Link style={linkStyle} to="/premium">
-                  <Paper sx={paperStyle} square={false} className="header-button">
-                    Premium
-                  </Paper>
-                </Link>
-              </Grid>
-            </Grid>
-              </>
+            </>
           ) : (
             <>
               <Grid
@@ -82,7 +82,7 @@ const Header = () => {
               >
                 <Grid item xs={4}>
                   <Link style={linkStyle} to="/login">
-                    <Paper sx={paperStyle}  square={false} className="header-button">
+                    <Paper sx={paperStyle} square={false} className="header-button">
                       Login
                     </Paper>
                   </Link>
