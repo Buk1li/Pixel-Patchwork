@@ -1,5 +1,5 @@
 {
-  "name": "programming-thoughts",
+  "name": "pixel-patchwork",
   "version": "1.0.0",
   "description": "",
   "main": "server/server.js",
@@ -9,23 +9,12 @@
     "install": "cd server && npm i && cd ../client && npm i",
     "seed": "cd server && npm run seed",
     "build": "cd client && npm run build",
-    "heroku-postbuild": "npm install && npm run seed && npm run build"
+    "heroku-postbuild": "cd server && npm install && cd ../client && npm install --production=false && npm run build"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^8.2.2"
-  },
-  "dependencies": {
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.5",
-    "@mui/material": "^5.15.19",
-    "express": "^4.19.2",
-    "socket.io": "^4.7.5",
-    "vite": "^4.4.5"
-  },
-  "engines": {
-    "node": "14.x"
   }
 }

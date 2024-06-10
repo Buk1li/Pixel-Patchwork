@@ -22,16 +22,17 @@ const Canvas = () => {
 
     const tipStyle = {
         color: '#fff',
-        backgroundColor: 'grey',
+        backgroundColor: '#7C96B0',
         height: '3.5em',
         margin: '0.5em',
         textAlign: 'center',
+        fontSize: '20px',
         alignContent: 'center',
-        borderRadius: '10%',
-        boxShadow: '1em 0.5em 1em black'
+        borderRadius: '15px',
+        boxShadow: '1em 0.5em 1em black',
     }
-    
-    //This state is just the coordinates of the pixel that was clicked on
+
+    // This state is just the coordinates of the pixel that was clicked on
     const [pixelTarget, setPixelTarget] = useState(null);
 
     // This state is the info that should be displayed in the tooltip

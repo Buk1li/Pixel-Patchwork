@@ -19,6 +19,11 @@
     "react-router-dom": "^6.11.2",
     "socket.io": "^4.7.5",
     "socket.io-client": "^4.7.5",
+    "@mui/material": "^5.13.0",
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@mui/system": "^5.13.0",
+    "@mui/icons-material": "^5.13.0",
     "@stripe/stripe-js": "^1.54.0"
   },
   "devDependencies": {
