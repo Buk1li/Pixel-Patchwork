@@ -87,6 +87,8 @@ const Canvas = () => {
             };
         }
 
+        setPixelArray2D(arr);
+
         // Draw grid lines if showGrid is true
         if (showGrid) {
             ctx.strokeStyle = "#cccccc"; // Color of the grid lines
@@ -106,8 +108,6 @@ const Canvas = () => {
                 ctx.stroke();
             }
         }
-
-        setPixelArray2D(arr);
     };
 
     // gets the mouse's position relative to size (could prove problematic)
