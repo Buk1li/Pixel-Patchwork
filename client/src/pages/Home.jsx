@@ -12,6 +12,7 @@ const Home = () => {
       <CountDown/>
       <Canvas/>
       <Chat socket={socket}/>
+      <footer style={{height: "150px"}}></footer>
     </main>
   );
 };
